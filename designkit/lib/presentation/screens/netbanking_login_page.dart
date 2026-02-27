@@ -18,8 +18,8 @@ class NetBankingLoginPage extends StatelessWidget {
       child: SizedBox(
         width: width,
         height: height,
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             // Left Panel: Info Section (Blue Background)
             Expanded(flex: 1, child: LeftInfoSection()),
             // Right Panel: Login Form (Starry Background)

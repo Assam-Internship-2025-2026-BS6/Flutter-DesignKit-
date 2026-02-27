@@ -13,7 +13,7 @@ class _GlasscardScreenState extends State<GlasscardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey.shade900,
-      body: Center(
+      body: const Center(
         child: GlassCard(
           width: 587,
           height: 932,
