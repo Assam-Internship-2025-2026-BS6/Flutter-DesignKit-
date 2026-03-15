@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
+import 'text.dart' as dk;
+import '../../core/tokens/colors.dart';
 
 class LoginButton extends StatefulWidget {
   final VoidCallback onTap;
@@ -13,7 +15,7 @@ class LoginButton extends StatefulWidget {
     required this.onTap,
     this.width = 483.0,
     this.height = 63.0,
-    this.color = const Color(0xFF2938AD),
+    this.color = AppColors.hdfcBlue,
     this.text = "Login",
     this.disabled = false,
   });
@@ -87,14 +89,11 @@ class _LoginButtonState extends State<LoginButton>
               ],
             ),
             alignment: Alignment.center,
-            child: Text(
-              widget.text,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 0.5,
-              ),
+            child: dk.Text(
+              text: widget.text,
+              color: AppColors.white,
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import '../atoms/button.dart' as dk;
+import '../atoms/text.dart' as dk;
+import '../../core/tokens/colors.dart';
+import '../../core/tokens/typography.dart';
+import '../../core/tokens/spacing.dart';
 
 class LeftInfoSection extends StatelessWidget {
   final double? width;
@@ -13,7 +17,7 @@ class LeftInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    Widget content = Container(
       width: width,
       height: height,
       decoration: const BoxDecoration(
@@ -27,92 +31,84 @@ class LeftInfoSection extends StatelessWidget {
           final isSmall = constraints.maxWidth < 600;
           return Padding(
             padding: EdgeInsets.symmetric(
-              vertical: 0.0,
-              horizontal: isSmall ? 20.0 : 40.0,
+              vertical: AppSpacing.none,
+              horizontal: isSmall ? AppSpacing.large : AppSpacing.xxLarge,
             ),
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // Top Writing Part
+                Column(
                   children: [
-                    // Top Writing Part
-                    Column(
-                      children: [
-                        SizedBox(height: isSmall ? 30 : 60),
-                        Text(
-                          "Digital Arrest is Fake!",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: isSmall ? 32 : 44,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            height: 1.2,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          "Genuine officers will never detain you\nor ask for money",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: isSmall ? 20 : 28,
-                            color: Colors.white70,
-                            height: 1.4,
-                          ),
-                        ),
-                      ],
+                    const SizedBox(height: 60),
+                    dk.Text(
+                      text: "Digital Arrest is Fake!",
+                      textAlign: TextAlign.center,
+                      fontSize: isSmall ? AppTypography.fontH2 : AppTypography.fontExtraLarge,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.white,
                     ),
-      
-                    // Bottom Writing Part & Know More Button
-                    Column(
-                      children: [
-                        Text(
-                          "When in doubt reach out to your bank.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: isSmall ? 20 : 28,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          "Click here to know more about Investment and APK Fraud",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: isSmall ? 16 : 21,
-                            color: Colors.white60,
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        
-                        // Know More Button
-                        dk.Button(
-                          onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Loading detailed fraud prevention guide..."),
-                                duration: Duration(seconds: 2),
-                              ),
-                            );
-                          },
-                          text: "Know More",
-                          width: isSmall ? 250 : 350,
-                          height: 55,
-                          color: const Color(0xFF2938AD),
-                          opacity: 0.8,
-                        ),
-                        SizedBox(height: isSmall ? 30 : 60),
-                      ],
+                    const SizedBox(height: 10),
+                    dk.Text(
+                      text: "Genuine officers will never detain you\nor ask for money",
+                      textAlign: TextAlign.center,
+                      fontSize: isSmall ? AppTypography.fontLarge : AppTypography.fontLargePlus,
+                      color: AppColors.white.withAlpha(178), // 0.7 * 255
                     ),
                   ],
                 ),
-              ),
+    
+                // Bottom Writing Part & Know More Button
+                Column(
+                  children: [
+                    dk.Text(
+                      text: "When in doubt reach out to your bank.",
+                      textAlign: TextAlign.center,
+                      fontSize: isSmall ? AppTypography.fontLarge : AppTypography.fontLargePlus,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.white,
+                    ),
+                    const SizedBox(height: 8),
+                    dk.Text(
+                      text: "Click here to know more about Investment and APK Fraud",
+                      textAlign: TextAlign.center,
+                      fontSize: isSmall ? AppTypography.fontMedium : AppTypography.fontLarge,
+                      color: AppColors.white.withAlpha(153), // 0.6 * 255
+                    ),
+                    const SizedBox(height: 30),
+                    
+                    // Know More Button
+                    dk.Button(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: dk.Text(text: "Loading detailed fraud prevention guide...", fontSize: 16),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      },
+                      text: "Know More",
+                      width: isSmall ? 250 : 350,
+                      height: 55,
+                      color: AppColors.hdfcBlue,
+                      opacity: 0.8,
+                    ),
+                    const SizedBox(height: 60),
+                  ],
+                ),
+              ],
             ),
           );
         },
       ),
     );
+
+    // In standalone preview mode (explicit dimensions), center the component
+    if (width != null && height != null) {
+      return Center(child: content);
+    }
+    // Inside Expanded (NetBankingLoginPage), fill the parent
+    return content;
   }
 }
 

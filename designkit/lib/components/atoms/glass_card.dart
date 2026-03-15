@@ -1,5 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../../core/tokens/radius.dart';
+import '../../core/tokens/spacing.dart';
+import '../../core/tokens/shadows.dart';
 
 class GlassCard extends StatelessWidget {
   final Widget child;
@@ -18,11 +21,11 @@ class GlassCard extends StatelessWidget {
     required this.child,
     this.width,
     this.height,
-    this.borderRadius = 28,
+    this.borderRadius = AppRadius.xLarge,
     this.opacity = 0.15,
     this.blur = 20,
     this.borderOpacity = 0.3,
-    this.padding = const EdgeInsets.all(24),
+    this.padding = const EdgeInsets.all(AppSpacing.large),
     this.showShadow = true,
     this.tintColor = Colors.white,
   });
@@ -41,15 +44,7 @@ class GlassCard extends StatelessWidget {
             color: tintColor.withAlpha((opacity * 255).round()),
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(color: tintColor.withAlpha((borderOpacity * 255).round())),
-            boxShadow: showShadow
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withAlpha(20), // 0.08 * 255
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ]
-                : [],
+            boxShadow: showShadow ? AppShadows.card : [],
           ),
           child: child,
         ),

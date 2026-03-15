@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Text;
 import '../atoms/text_field.dart' as dk;
+import '../atoms/text.dart' as dk;
+import '../../core/tokens/typography.dart';
 
 class LabeledInputField extends StatelessWidget {
   final String label;
@@ -19,13 +21,11 @@ class LabeledInputField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.black54,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
+        dk.Text(
+          text: label,
+          color: Colors.black,
+          fontSize: AppTypography.fontMedium,
+          fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: 6),
         dk.TextField(

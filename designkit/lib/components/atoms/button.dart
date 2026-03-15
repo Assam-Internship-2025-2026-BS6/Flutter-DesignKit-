@@ -1,37 +1,34 @@
-import 'dart:ui';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as m show Text;
+import 'package:flutter/material.dart' hide Text;
+import 'text.dart' as dk;
+import '../../core/tokens/colors.dart';
 
 class Button extends StatefulWidget {
+  final String text;
   final VoidCallback? onTap;
   final double width;
   final double height;
-  final String text;
-  final bool disabled;
   final Color color;
-  final bool showOutline;
-  final double blur;
+  final bool disabled;
   final double opacity;
+  final Offset offset;
 
   const Button({
     super.key,
+    required this.text,
     this.onTap,
-    this.width = 321,
-    this.height = 61,
-    this.text = "Know More",
+    this.width = 150.0,
+    this.height = 50.0,
+    this.color = AppColors.hdfcBlue,
     this.disabled = false,
-    this.color = const Color(0xFF5371F9),
-    this.showOutline = true,
-    this.blur = 10,
-    this.opacity = 0.3,
+    this.opacity = 1.0,
+    this.offset = Offset.zero,
   });
 
   @override
   State<Button> createState() => _ButtonState();
 }
 
-class _ButtonState extends State<Button>
-    with SingleTickerProviderStateMixin {
+class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
@@ -72,48 +69,36 @@ class _ButtonState extends State<Button>
 
   @override
   Widget build(BuildContext context) {
-    return Opacity(
-      opacity: widget.disabled ? 0.5 : 1,
-      child: GestureDetector(
-        onTapDown: _handleTapDown,
-        onTapUp: _handleTapUp,
-        onTapCancel: _handleTapCancel,
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: widget.blur, sigmaY: widget.blur),
-              child: Container(
-                width: widget.width,
-                height: widget.height,
-                decoration: BoxDecoration(
-                  color: widget.color.withValues(alpha: widget.opacity),
-                  borderRadius: BorderRadius.circular(20),
-                  border: widget.showOutline
-                      ? Border.all(
-                          color: Colors.white.withValues(alpha: 0.2),
-                          width: 1,
-                        )
-                      : null,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
-                      offset: const Offset(0, 4),
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
-                alignment: Alignment.center,
-                child: m.Text(
-                  widget.text,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
+    return Transform.translate(
+      offset: widget.offset,
+      child: Opacity(
+        opacity: widget.disabled ? 0.5 : widget.opacity,
+        child: GestureDetector(
+          onTapDown: _handleTapDown,
+          onTapUp: _handleTapUp,
+          onTapCancel: _handleTapCancel,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: Container(
+              width: widget.width,
+              height: widget.height,
+              decoration: BoxDecoration(
+                color: widget.color,
+                borderRadius: BorderRadius.circular(widget.height / 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(20),
+                    offset: const Offset(0, 4),
+                    blurRadius: 4,
                   ),
-                ),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: dk.Text(
+                text: widget.text,
+                color: AppColors.white,
+                fontSize: widget.height * 0.4, // Responsive font size based on height
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),

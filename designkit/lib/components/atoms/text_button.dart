@@ -14,7 +14,7 @@ class TextButton extends StatefulWidget {
     required this.text,
     required this.onPressed,
     this.color,
-    this.fontSize = 24,
+    this.fontSize = 40,
     this.isClickable = true,
     this.enableHover = true,
   });

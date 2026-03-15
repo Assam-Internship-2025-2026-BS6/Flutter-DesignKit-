@@ -1,6 +1,11 @@
-import 'package:flutter/material.dart' hide TextField;
-import 'package:flutter/material.dart' as m show TextField, TextEditingController, Text;
+import 'package:flutter/material.dart' hide TextField, Text;
+import 'package:flutter/material.dart' as m show TextField, TextEditingController;
 import 'package:flutter/services.dart';
+import 'text.dart' as dk;
+import '../../core/tokens/typography.dart';
+import '../../core/tokens/colors.dart';
+import '../../core/tokens/radius.dart';
+import '../../core/tokens/spacing.dart';
 
 class TextField extends StatefulWidget {
   final String hintText;
@@ -11,6 +16,10 @@ class TextField extends StatefulWidget {
   final double? width;
   final double? height;
   final bool showErrorText;
+  final Color textColor;
+  final FontWeight fontWeight;
+  final bool enabled;
+  final Offset offset;
 
   const TextField({
     super.key,
@@ -20,8 +29,12 @@ class TextField extends StatefulWidget {
     this.maxLength,
     this.inputFormatters,
     this.width,
-    this.height,
+    this.height = 60.0,
     this.showErrorText = true,
+    this.textColor = AppColors.black,
+    this.fontWeight = FontWeight.w500,
+    this.enabled = true,
+    this.offset = Offset.zero,
   });
 
   @override
@@ -35,7 +48,7 @@ class _TextFieldState extends State<TextField> {
   bool _isHovering = false;
 
   String? _validatePassword(String value) {
-    if (value.isEmpty) return null; // Let the custom validator handle empty if needed
+    if (value.trim().isEmpty) return null;
 
     if (value.length < 8) return "Minimum 8 characters required";
     if (value.length > 16) return "Maximum 16 characters allowed";
@@ -53,13 +66,15 @@ class _TextFieldState extends State<TextField> {
   }
 
   void _validate(String value) {
+    if (value.trim().isEmpty) {
+      setState(() => _errorText = null);
+      return;
+    }
     String? error;
 
-    if (widget.isPassword) {
-      debugPrint("Password Field Input: $value");
+    // Only validate password if it's not empty, to avoid showing error on focus
+    if (widget.isPassword && value.isNotEmpty) {
       error = _validatePassword(value);
-    } else {
-      debugPrint("Customer ID Field Input: $value");
     }
 
     if (error == null && widget.validator != null) {
@@ -75,90 +90,106 @@ class _TextFieldState extends State<TextField> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.width,
-      height: widget.height,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min, // Don't take extra vertical space
-        children: [
-          MouseRegion(
-            onEnter: (_) => setState(() => _isHovering = true),
-            onExit: (_) => setState(() => _isHovering = false),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              decoration: BoxDecoration(
-                color: _isHovering
-                    ? const Color.fromARGB(255, 27, 27, 27).withValues(alpha: 0.05)
-                    : const Color(0x1FFFFFFF),
-                borderRadius: BorderRadius.circular(30), // Pill shape
-                border: Border.all(
-                  color: (hasError && widget.showErrorText) ? Colors.red : Colors.black.withValues(alpha: 0.1), // Visible border
-                  width: 1.5,
-                ),
-              ),
-              child: m.TextField(
-                controller: _controller,
-                obscureText: widget.isPassword ? _obscureText : false,
-                maxLength: widget.maxLength,
-                inputFormatters: widget.inputFormatters,
-                onChanged: _validate,
-                style: const TextStyle(
-                  fontSize: 22,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  fontWeight: FontWeight.w500,
-                ),
-                textAlignVertical: TextAlignVertical.center,
-                decoration: InputDecoration(
-                  counterText: "",
-                  hintText: widget.hintText,
-                  hintStyle: TextStyle(
-                    color: Colors.black.withValues(alpha: 0.3), // Darker hint for better visibility
-                    fontSize: 20,
+    return Transform.translate(
+      offset: widget.offset,
+      child: SizedBox(
+        width: widget.width,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            MouseRegion(
+              onEnter: (_) => setState(() => _isHovering = true),
+              onExit: (_) => setState(() => _isHovering = false),
+              child: SizedBox(
+                height: widget.height,
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: _isHovering
+                        ? const Color(0x26FFFFFF).withValues(alpha: 0.1)
+                        : const Color(0x26FFFFFF),
+                    borderRadius: BorderRadius.circular(AppRadius.circular),
+                    border: Border.all(
+                      color: (hasError && widget.showErrorText) 
+                          ? Colors.red 
+                          : Colors.black.withValues(alpha: 0.2), // Darker border for visibility
+                      width: 2.0, // Thicker border
+                    ),
                   ),
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 16,
-                  ),
-                  border: InputBorder.none,
-                  suffixIcon: widget.isPassword
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: IconButton(
-                            icon: Icon(
-                              _obscureText
-                                  ? Icons.visibility_off_outlined
-                                  : Icons.visibility_outlined,
-                              color: Colors.black87,
-                              size: 24,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
+                  child: Opacity(
+                    opacity: widget.enabled ? 1.0 : 0.5,
+                    child: m.TextField(
+                        enabled: widget.enabled,
+                        controller: _controller,
+                        obscureText: widget.isPassword ? _obscureText : false,
+                        maxLength: widget.maxLength,
+                        inputFormatters: widget.inputFormatters,
+                        onChanged: _validate,
+                        style: TextStyle(
+                          fontSize: AppTypography.fontLarge,
+                          color: widget.textColor,
+                          fontWeight: widget.fontWeight,
+                          fontFamily: AppTypography.fontFamily,
+                          height: 1.0,
+                        ),
+                        textAlignVertical: TextAlignVertical.center,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          counterText: "",
+                          hintText: widget.hintText,
+                          hintStyle: TextStyle(
+                            color: AppColors.black.withValues(alpha: 0.3),
+                            fontSize: AppTypography.fontLarge,
+                            fontFamily: AppTypography.fontFamily,
+                            fontWeight: FontWeight.w500, // Slightly thicker hint text
+                            height: 1.0,
                           ),
-                        )
-                      : null,
-                ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.large,
+                            vertical: 10.0,
+                          ),
+                          border: InputBorder.none,
+                          suffixIcon: widget.isPassword
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 12),
+                                  child: IconButton(
+                                    icon: Icon(
+                                      _obscureText
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      color: Colors.black87,
+                                      size: 20,
+                                    ),
+                                    onPressed: widget.enabled ? () {
+                                      setState(() {
+                                        _obscureText = !_obscureText;
+                                      });
+                                    } : null,
+                                  ),
+                                )
+                              : null,
+                        ),
+                      ),
+                  ),
+                  ),
               ),
             ),
-          ),
-          if (hasError && widget.showErrorText) ...[
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: m.Text(
-                _errorText!,
-                style: const TextStyle(
-                  color: Colors.red,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            if (hasError && widget.showErrorText) ...[
+              const SizedBox(height: 8),
+               Padding(
+                 padding: const EdgeInsets.only(left: AppSpacing.large),
+                 child: dk.Text(
+                   text: _errorText!,
+                   color: Colors.red,
+                   fontSize: AppTypography.fontMedium,
+                   fontWeight: FontWeight.w500,
+                 ),
+               ),
+            ],
           ],
-        ],
+        ),
       ),
     );
   }

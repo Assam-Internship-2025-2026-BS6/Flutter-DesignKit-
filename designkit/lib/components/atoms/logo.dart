@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'image_atom.dart';
 
 class Logo extends StatelessWidget {
   final double width;
@@ -30,7 +31,7 @@ class Logo extends StatelessWidget {
             boxShadow: showShadow
                 ? [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.1),
+                      color: Colors.black.withOpacity(0.1),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -45,20 +46,12 @@ class Logo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/hdfc_logo.png',
-                  height: 31.0,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.broken_image, color: Colors.white24, size: 24),
+                dkImage(
+                  imagePath: 'assets/hdfc_logo.png',
                 ),
                 const SizedBox(width: 20),
-                Image.asset(
-                  'assets/now_logo.png',
-                  height: 26.0,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.broken_image, color: Colors.white24, size: 20),
+                dkImage(
+                  imagePath: 'assets/now_logo.png',
                 ),
               ],
             ),

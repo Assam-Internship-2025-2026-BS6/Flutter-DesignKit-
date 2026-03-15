@@ -19,8 +19,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/hdfc_logo.png
-    - assets/now_logo.png
-    - assets/lock.png
-    - assets/left_image.png
-    - assets/right_back.png
+    - assets/
+

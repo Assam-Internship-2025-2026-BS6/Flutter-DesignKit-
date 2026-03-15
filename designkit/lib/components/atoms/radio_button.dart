@@ -18,7 +18,7 @@ class RadioButton extends StatelessWidget {
     this.label = "Radio Option",
     this.activeColor = const Color(0xFF1E1E4C),
     this.labelColor = Colors.black87,
-    this.fontSize = 18.0,
+    this.fontSize = 28.0,
     this.fontWeight = FontWeight.normal,
     this.size = 1.0,
     this.offset = Offset.zero,
@@ -27,6 +27,9 @@ class RadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isSelected = value;
+    final double scaleFactor = fontSize / 28.0;
+    final double containerSize = 24.0 * scaleFactor;
+    final double innerSize = 12.0 * scaleFactor;
     
     return Transform.translate(
       offset: offset,
@@ -47,20 +50,20 @@ class RadioButton extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: 24,
-                    height: 24,
+                    width: containerSize,
+                    height: containerSize,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: isSelected ? activeColor : Colors.grey,
-                        width: 2,
+                        width: 2 * scaleFactor,
                       ),
                     ),
                     child: Center(
                       child: isSelected
                           ? Container(
-                              width: 12,
-                              height: 12,
+                              width: innerSize,
+                              height: innerSize,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: activeColor,
@@ -69,7 +72,7 @@ class RadioButton extends StatelessWidget {
                           : null,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: 12 * scaleFactor),
                   Text(
                     label,
                     style: TextStyle(

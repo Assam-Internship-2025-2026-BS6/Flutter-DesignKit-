@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart' hide Text;
-import 'text.dart' as dk;
-import '../../core/tokens/colors.dart';
-import '../../core/tokens/typography.dart';
+import 'package:flutter/material.dart';
 
 class Dropdown extends StatefulWidget {
   final String? value;
@@ -22,7 +19,7 @@ class Dropdown extends StatefulWidget {
     this.label,
     this.hint = "Select option",
     this.width = 200,
-    this.activeColor = AppColors.darkBlue,
+    this.activeColor = const Color(0xFF1E1E4C),
     this.size = 1.0,
     this.offset = Offset.zero,
   });
@@ -60,11 +57,13 @@ class _DropdownState extends State<Dropdown> {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.label != null) ...[
-              dk.Text(
-                text: widget.label!,
-                color: Colors.black54,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+              Text(
+                widget.label!,
+                style: const TextStyle(
+                  color: Colors.black87,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 8),
             ],
@@ -77,7 +76,7 @@ class _DropdownState extends State<Dropdown> {
                 border: Border.all(color: Colors.black12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
+                    color: Colors.black.withOpacity(0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -86,18 +85,21 @@ class _DropdownState extends State<Dropdown> {
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<String>(
                   value: widget.items.contains(_selectedValue) ? _selectedValue : null,
-                  hint: dk.Text(text: widget.hint, color: Colors.black38, fontSize: 14),
+                  hint: Text(widget.hint, style: const TextStyle(color: Colors.black38, fontSize: 14)),
                   isExpanded: true,
                   icon: Icon(Icons.keyboard_arrow_down, color: widget.activeColor),
                   borderRadius: BorderRadius.circular(12),
-                  dropdownColor: Colors.white.withValues(alpha: 0.9), // Subtle glass effect
+                  dropdownColor: Colors.white.withOpacity(0.9), // Subtle glass effect
                   items: widget.items.map((String item) {
                     return DropdownMenuItem<String>(
                       value: item,
-                      child: dk.Text(
-                        text: item,
-                        color: Colors.black87,
-                        fontSize: 15,
+                      child: Text(
+                        item,
+                        style: const TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     );
                   }).toList(),

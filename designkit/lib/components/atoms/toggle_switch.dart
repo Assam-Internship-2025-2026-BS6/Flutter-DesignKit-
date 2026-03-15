@@ -112,7 +112,7 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
                   widget.label!,
                   style: TextStyle(
                     color: widget.labelColor,
-                    fontSize: 16,
+                    fontSize: 30,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

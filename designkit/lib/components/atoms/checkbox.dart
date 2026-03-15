@@ -154,7 +154,7 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
                       widget.label!,
                       style: TextStyle(
                         color: widget.disabled ? Colors.grey : widget.labelColor,
-                        fontSize: 17, // Slightly larger for professional look
+                        fontSize: 30, // Slightly larger for professional look
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0.2,
                       ),
