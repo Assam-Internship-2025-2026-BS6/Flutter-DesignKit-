@@ -7,6 +7,7 @@ class ToggleSwitch extends StatefulWidget {
   final Color activeColor;
   final Color labelColor;
   final double size;
+  final double fontSize;
   final Offset offset;
 
   const ToggleSwitch({
@@ -17,6 +18,7 @@ class ToggleSwitch extends StatefulWidget {
     this.activeColor = const Color(0xFF1E1E4C),
     this.labelColor = Colors.black87,
     this.size = 1.0,
+    this.fontSize = 20.0,
     this.offset = Offset.zero,
   });
 
@@ -112,7 +114,7 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
                   widget.label!,
                   style: TextStyle(
                     color: widget.labelColor,
-                    fontSize: 30,
+                    fontSize: widget.fontSize,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

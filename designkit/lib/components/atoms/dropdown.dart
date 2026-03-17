@@ -33,6 +33,7 @@ class Dropdown extends StatefulWidget {
 
 class _DropdownState extends State<Dropdown> {
   String? _selectedValue;
+  final MenuController _menuController = MenuController();
 
   @override
   void initState() {
@@ -68,49 +69,89 @@ class _DropdownState extends State<Dropdown> {
               ),
               const SizedBox(height: 8),
             ],
-            Container(
-              width: widget.width,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.black12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+            MenuAnchor(
+              controller: _menuController,
+              alignmentOffset: const Offset(0, 4),
+              style: MenuStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.white),
+                surfaceTintColor: WidgetStateProperty.all(Colors.white),
+                elevation: WidgetStateProperty.all(8),
+                padding: WidgetStateProperty.all(EdgeInsets.zero),
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: const BorderSide(color: Colors.black12),
                   ),
-                ],
+                ),
+                fixedSize: WidgetStateProperty.all(Size.fromWidth(widget.width)),
               ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: widget.items.contains(_selectedValue) ? _selectedValue : null,
-                  hint: dk.Text(text: widget.hint, color: Colors.black38, fontSize: 14),
-                  isExpanded: true,
-                  icon: Icon(Icons.keyboard_arrow_down, color: widget.activeColor),
-                  borderRadius: BorderRadius.circular(12),
-                  dropdownColor: Colors.white.withValues(alpha: 0.9), // Subtle glass effect
-                  items: widget.items.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: dk.Text(
-                        text: item,
-                        color: Colors.black87,
-                        fontSize: 15,
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (String? newValue) {
+              menuChildren: widget.items.map((item) {
+                return MenuItemButton(
+                  onPressed: () {
                     setState(() {
-                      _selectedValue = newValue;
+                      _selectedValue = item;
                     });
-                    if (widget.onChanged != null) {
-                      widget.onChanged!(newValue);
+                    widget.onChanged?.call(item);
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: dk.Text(
+                      text: item,
+                      color: Colors.black87,
+                      fontSize: 15,
+                    ),
+                  ),
+                );
+              }).toList(),
+              builder: (context, controller, child) {
+                return GestureDetector(
+                  onTap: () {
+                    if (controller.isOpen) {
+                      controller.close();
+                    } else {
+                      controller.open();
                     }
                   },
-                ),
-              ),
+                  child: Container(
+                    width: widget.width,
+                    height: 50,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: controller.isOpen ? widget.activeColor : Colors.black12,
+                        width: controller.isOpen ? 1.5 : 1,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: dk.Text(
+                            text: _selectedValue ?? widget.hint,
+                            color: _selectedValue == null ? Colors.black38 : Colors.black87,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Icon(
+                          controller.isOpen 
+                              ? Icons.keyboard_arrow_up 
+                              : Icons.keyboard_arrow_down, 
+                          color: widget.activeColor
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),

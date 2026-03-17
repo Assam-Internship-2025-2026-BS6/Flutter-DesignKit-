@@ -14,6 +14,7 @@ class DigicartSecurity extends StatefulWidget {
   final double blur;
   final double opacity;
   final VoidCallback? onTap;
+  final Offset offset;
 
   const DigicartSecurity({
     super.key,
@@ -25,6 +26,7 @@ class DigicartSecurity extends StatefulWidget {
     this.blur = 15,
     this.opacity = 0.2,
     this.onTap,
+    this.offset = Offset.zero,
   });
 
   @override
@@ -36,8 +38,10 @@ class _DigicartSecurityState extends State<DigicartSecurity> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
+    return Transform.translate(
+      offset: widget.offset,
+      child: MouseRegion(
+        cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTapDown: (_) => setState(() => _isPressed = true),
         onTapUp: (_) => setState(() => _isPressed = false),
@@ -96,6 +100,7 @@ class _DigicartSecurityState extends State<DigicartSecurity> {
               ],
             ),
           ),
+        ),
         ),
       ),
     );

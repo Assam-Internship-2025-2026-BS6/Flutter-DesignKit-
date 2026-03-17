@@ -18,6 +18,7 @@ class QrLogin extends StatelessWidget {
   final double height;
   final double blur;
   final double opacity;
+  final Offset offset;
 
   const QrLogin({
     super.key,
@@ -32,6 +33,7 @@ class QrLogin extends StatelessWidget {
     this.height = 120,
     this.blur = 15,
     this.opacity = 0.2,
+    this.offset = Offset.zero,
   });
 
   void _showQrPopup(BuildContext context) {
@@ -88,62 +90,65 @@ class QrLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isVerySmall = constraints.maxWidth < 450;
-        
-        return dk.GlassCard(
-          width: width,
-          height: height,
-          blur: blur,
-          opacity: opacity,
-          borderRadius: 20,
-          padding: EdgeInsets.symmetric(
-            horizontal: isVerySmall ? 12 : 20,
-            vertical: height < 80 ? 4 : 8,
-          ),
-          showShadow: false,
-          tintColor: AppColors.grey,
-          child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () => _showQrPopup(context),
-              borderRadius: BorderRadius.circular(20),
-              child: Row(
-                children: [
-                  if (height > 40) _buildIconTile(isVerySmall, height),
-                  if (height > 40) SizedBox(width: isVerySmall ? 10 : 12),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        dk.Text(
-                          text: title,
-                          maxLines: 1,
-                          fontSize: height < 50 ? AppTypography.fontSmall : (isVerySmall ? AppTypography.fontLarge : AppTypography.fontLargePlus),
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                        if (height > 60) ...[
-                          const SizedBox(height: 4),
-                            dk.Text(
-                              text: subtitle,
-                              maxLines: height > 100 ? 2 : 1,
-                              fontSize: isVerySmall ? AppTypography.fontSmall : AppTypography.fontMedium,
-                              color: AppColors.black.withValues(alpha: 0.87),
-                            ),
+    return Transform.translate(
+      offset: offset,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isVerySmall = constraints.maxWidth < 450;
+          
+          return dk.GlassCard(
+            width: width,
+            height: height,
+            blur: blur,
+            opacity: opacity,
+            borderRadius: 20,
+            padding: EdgeInsets.symmetric(
+              horizontal: isVerySmall ? 12 : 20,
+              vertical: height < 80 ? 4 : 8,
+            ),
+            showShadow: false,
+            tintColor: AppColors.grey,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => _showQrPopup(context),
+                borderRadius: BorderRadius.circular(20),
+                child: Row(
+                  children: [
+                    if (height > 40) _buildIconTile(isVerySmall, height),
+                    if (height > 40) SizedBox(width: isVerySmall ? 10 : 12),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          dk.Text(
+                            text: title,
+                            maxLines: 1,
+                            fontSize: height < 50 ? AppTypography.fontSmall : (isVerySmall ? AppTypography.fontLarge : AppTypography.fontLargePlus),
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black,
+                          ),
+                          if (height > 60) ...[
+                            const SizedBox(height: 4),
+                              dk.Text(
+                                text: subtitle,
+                                maxLines: height > 100 ? 2 : 1,
+                                fontSize: isVerySmall ? AppTypography.fontSmall : AppTypography.fontMedium,
+                                color: AppColors.black.withValues(alpha: 0.87),
+                              ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

@@ -48,22 +48,31 @@ class _TextFieldState extends State<TextField> {
   bool _isHovering = false;
 
   String? _validatePassword(String value) {
-    if (value.trim().isEmpty) return null;
 
-    if (value.length < 8) return "Minimum 8 characters required";
-    if (value.length > 16) return "Maximum 16 characters allowed";
-
-    final hasUppercase = value.contains(RegExp(r'[A-Z]'));
-    final hasLowercase = value.contains(RegExp(r'[a-z]'));
-    final hasDigits = value.contains(RegExp(r'[0-9]'));
-    final hasSpecialCharacters = value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
-
-    if (!hasUppercase || !hasLowercase || !hasDigits || !hasSpecialCharacters) {
-      return "Use mix of A-Z, a-z, 0-9 & symbols";
-    }
-
+  if (value.trim().isEmpty) {
     return null;
   }
+
+  if (value.length > 16) {
+    return "Maximum 16 characters allowed";
+  }
+
+  if (value.length < 8) {
+    return "Minimum 8 characters required";
+  }
+
+  final hasUppercase = value.contains(RegExp(r'[A-Z]'));
+  final hasLowercase = value.contains(RegExp(r'[a-z]'));
+  final hasDigits = value.contains(RegExp(r'[0-9]'));
+  final hasSpecialCharacters =
+      value.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'));
+
+  if (!hasUppercase || !hasLowercase || !hasDigits || !hasSpecialCharacters) {
+    return "Use mix of A-Z, a-z, 0-9 & symbols";
+  }
+
+  return null;
+}
 
   void _validate(String value) {
     if (value.trim().isEmpty) {
@@ -93,7 +102,7 @@ class _TextFieldState extends State<TextField> {
     return Transform.translate(
       offset: widget.offset,
       child: SizedBox(
-        width: widget.width,
+        width: widget.width != null && widget.width! > 850 ? 850 : widget.width,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

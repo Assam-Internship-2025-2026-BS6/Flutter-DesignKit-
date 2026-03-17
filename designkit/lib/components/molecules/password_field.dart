@@ -7,17 +7,21 @@ class PasswordField extends StatelessWidget {
   final String label;
   final String hintText;
   final double? width;
+  final Offset offset;
 
   const PasswordField({
     super.key,
     required this.label,
     required this.hintText,
     this.width,
+    this.offset = Offset.zero,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Transform.translate(
+      offset: offset,
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -31,9 +35,11 @@ class PasswordField extends StatelessWidget {
         dk.TextField(
           hintText: hintText,
           isPassword: true,
-          width: width,
+          width: width != null && width! > 850 ? 850 : width,
+          maxLength: 16,
         ),
       ],
+    ),
     );
   }
 }

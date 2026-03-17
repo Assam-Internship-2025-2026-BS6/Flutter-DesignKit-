@@ -7,17 +7,21 @@ class LabeledInputField extends StatelessWidget {
   final String label;
   final String hintText;
   final double? width;
+  final Offset offset;
 
   const LabeledInputField({
     super.key,
     required this.label,
     required this.hintText,
     this.width,
+    this.offset = Offset.zero,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Transform.translate(
+      offset: offset,
+      child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -30,9 +34,10 @@ class LabeledInputField extends StatelessWidget {
         const SizedBox(height: 6),
         dk.TextField(
           hintText: hintText,
-          width: width,
+          width: width != null && width! > 850 ? 850 : width,
         ),
       ],
+    ),
     );
   }
 }

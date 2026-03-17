@@ -8,6 +8,7 @@ class TextButton extends StatefulWidget {
   final double fontSize;
   final bool isClickable;
   final bool enableHover;
+  final Offset offset;
 
   const TextButton({
     super.key,
@@ -17,6 +18,7 @@ class TextButton extends StatefulWidget {
     this.fontSize = 40,
     this.isClickable = true,
     this.enableHover = true,
+    this.offset = Offset.zero,
   });
 
   @override
@@ -31,33 +33,36 @@ class _TextButtonState extends State<TextButton> {
     final Color baseColor = widget.color ?? const Color(0xFF283097);
     final bool effectiveClickable = widget.isClickable;
 
-    return MouseRegion(
-      cursor: effectiveClickable ? SystemMouseCursors.click : SystemMouseCursors.basic,
-      onEnter: (_) {
-        if (widget.enableHover && effectiveClickable) {
-          setState(() => _isHovering = true);
-        }
-      },
-      onExit: (_) {
-        if (widget.enableHover && effectiveClickable) {
-          setState(() => _isHovering = false);
-        }
-      },
-      child: GestureDetector(
-        onTap: effectiveClickable ? widget.onPressed : null,
-        child: AnimatedDefaultTextStyle(
-          duration: const Duration(milliseconds: 150),
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: widget.fontSize,
-            height: 1.0,
-            letterSpacing: 0,
-            color: _isHovering ? baseColor.withValues(alpha: 0.8) : baseColor,
-            decoration: _isHovering && widget.enableHover
-                ? TextDecoration.underline
-                : TextDecoration.none,
+    return Transform.translate(
+      offset: widget.offset,
+      child: MouseRegion(
+        cursor: effectiveClickable ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        onEnter: (_) {
+          if (widget.enableHover && effectiveClickable) {
+            setState(() => _isHovering = true);
+          }
+        },
+        onExit: (_) {
+          if (widget.enableHover && effectiveClickable) {
+            setState(() => _isHovering = false);
+          }
+        },
+        child: GestureDetector(
+          onTap: effectiveClickable ? widget.onPressed : null,
+          child: AnimatedDefaultTextStyle(
+            duration: const Duration(milliseconds: 150),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: widget.fontSize,
+              height: 1.0,
+              letterSpacing: 0,
+              color: _isHovering ? baseColor.withValues(alpha: 0.8) : baseColor,
+              decoration: _isHovering && widget.enableHover
+                  ? TextDecoration.underline
+                  : TextDecoration.none,
+            ),
+            child: m.Text(widget.text),
           ),
-          child: m.Text(widget.text),
         ),
       ),
     );
