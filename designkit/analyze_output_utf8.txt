@@ -1,9 +1,0 @@
-﻿Analyzing designkit...
-
-  error - lib\components\atoms\text.dart:43:9 - Expected to find ','. - expected_token
-warning - lib\components\atoms\text_field.dart:2:84 - The name Text is shown, but isn't used. Try removing the name from the list of shown members. - unused_shown_name
-warning - lib\components\atoms\text_field.dart:2:90 - The name Padding is shown, but isn't used. Try removing the name from the list of shown members. - unused_shown_name
-warning - lib\components\atoms\text_field.dart:2:99 - The name MainAxisSize is shown, but isn't used. Try removing the name from the list of shown members. - unused_shown_name
-warning - lib\components\atoms\text_field.dart:2:113 - The name CrossAxisAlignment is shown, but isn't used. Try removing the name from the list of shown members. - unused_shown_name
-
-5 issues found.
