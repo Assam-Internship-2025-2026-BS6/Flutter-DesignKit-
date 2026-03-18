@@ -4,6 +4,7 @@ import '../atoms/glass_card.dart' as dk;
 import '../atoms/text_button.dart' as dk;
 import '../atoms/login_button.dart' as dk;
 import '../atoms/text.dart' as dk;
+import '../atoms/checkbox.dart' as dk;
 import '../atoms/image_atom.dart';
 import '../molecules/qr_login.dart';
 import '../molecules/digicart_security.dart';
@@ -14,7 +15,7 @@ import '../../core/tokens/typography.dart';
 import '../../core/tokens/spacing.dart';
 import '../../core/tokens/radius.dart';
 
-class LandingFormOrganism extends StatelessWidget {
+class LandingFormOrganism extends StatefulWidget {
   final double width;
   final double height;
   final Color tintColor;
@@ -31,6 +32,13 @@ class LandingFormOrganism extends StatelessWidget {
   });
 
   @override
+  State<LandingFormOrganism> createState() => _LandingFormOrganismState();
+}
+
+class _LandingFormOrganismState extends State<LandingFormOrganism> {
+  bool _keepMeLoggedIn = false;
+
+  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -42,15 +50,15 @@ class LandingFormOrganism extends StatelessWidget {
 
         return Center(
           child: SizedBox(
-            width: width,
-            height: height,
+            width: widget.width,
+            height: widget.height,
             child: Column(
               children: [
                 // GlassCard takes all available space minus footer
                 Expanded(
                   child: dk.GlassCard(
-                    width: width,
-                    tintColor: tintColor,
+                    width: widget.width,
+                    tintColor: widget.tintColor,
                     borderRadius: AppRadius.circular,
                     padding: EdgeInsets.symmetric(
                       horizontal: isSmall ? AppSpacing.medium : AppSpacing.large,
@@ -104,7 +112,7 @@ class LandingFormOrganism extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            LabeledInputField(
+                            const LabeledInputField(
                               label: "Customer ID/User ID",
                               hintText: "Customer ID/ User ID",
                             ),
@@ -121,14 +129,14 @@ class LandingFormOrganism extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            PasswordField(
+                            const PasswordField(
                               label: "Password",
                               hintText: "Password",
                             ),
                             const SizedBox(height: 8),
                             dk.TextButton(
                               text: "Set/Reset Password",
-                              onPressed: onSetResetPassword ?? () => debugPrint("Set/Reset Password Pressed"),
+                              onPressed: widget.onSetResetPassword ?? () => debugPrint("Set/Reset Password Pressed"),
                               color: AppColors.accentBlue,
                               fontSize: isSmall ? AppTypography.fontMedium : AppTypography.fontLarge,
                             ),
@@ -143,6 +151,21 @@ class LandingFormOrganism extends StatelessWidget {
                           width: double.infinity,
                           height: isVeryShort ? 70 : 85,
                           opacity: 0.3,
+                        ),
+
+                        /// KEEP ME LOGGED IN
+                        dk.Checkbox(
+                          value: _keepMeLoggedIn,
+                          label: "Keep me logged in",
+                          size: isSmall ? 0.45 : 0.6,
+                          labelColor: Colors.black87,
+                          onChanged: (val) {
+                            if (val != null) {
+                              setState(() {
+                                _keepMeLoggedIn = val;
+                              });
+                            }
+                          },
                         ),
 
                         /// LOGIN BUTTON
@@ -169,7 +192,7 @@ class LandingFormOrganism extends StatelessWidget {
                      ),
                     dk.TextButton(
                       text: "Register Now",
-                      onPressed: onRegisterNow ?? () => debugPrint("Register Now Pressed"),
+                      onPressed: widget.onRegisterNow ?? () => debugPrint("Register Now Pressed"),
                       color: AppColors.hdfcBlue,
                       fontSize: isSmall ? AppTypography.fontSmall : AppTypography.fontMedium,
                     ),
