@@ -1,0 +1,31 @@
+Analyzing designkit...
+
+  error - lib\components\atoms\text.dart:45:22 - The method 'Alignment' isn't defined for the type 'Text'. Try correcting the name to the name of an existing method, or defining a method named 'Alignment'. - undefined_method
+  error - lib\components\atoms\toggle_switch.dart:140:11 - Expected to find ';'. - expected_token
+  error - lib\components\atoms\toggle_switch.dart:140:12 - Expected an identifier. - missing_identifier
+  error - lib\components\atoms\toggle_switch.dart:140:12 - Expected to find ';'. - expected_token
+  error - lib\components\atoms\toggle_switch.dart:140:12 - Unexpected text ';'. Try removing the text. - unexpected_token
+  error - lib\components\atoms\toggle_switch.dart:141:9 - Expected an identifier. - missing_identifier
+  error - lib\components\atoms\toggle_switch.dart:141:9 - Unexpected text ';'. Try removing the text. - unexpected_token
+warning - lib\components\atoms\dropdown.dart:4:8 - Unused import: '../../core/tokens/typography.dart'. Try removing the import directive. - unused_import
+warning - lib\components\atoms\text.dart:2:152 - The name Transform is shown, but isn't used. Try removing the name from the list of shown members. - unused_shown_name
+warning - lib\components\atoms\toggle_switch.dart:140:12 - Dead code. Try removing the code, or fixing the code before it so that it can be reached. - dead_code
+warning - lib\components\organisms\landing_form.dart:2:8 - Unused import: '../atoms/text_field.dart'. Try removing the import directive. - unused_import
+warning - lib\components\organisms\landing_form.dart:48:22 - The value of the local variable 'gap' isn't used. Try removing the variable or using it. - unused_local_variable
+warning - lib\components\organisms\landing_form.dart:49:22 - The value of the local variable 'smallGap' isn't used. Try removing the variable or using it. - unused_local_variable
+warning - lib\core\tokens\radius.dart:1:8 - Unused import: 'package:flutter/material.dart'. Try removing the import directive. - unused_import
+warning - lib\core\tokens\spacing.dart:1:8 - Unused import: 'package:flutter/material.dart'. Try removing the import directive. - unused_import
+   info - lib\components\atoms\image_atom.dart:4:7 - The type name 'dkImage' isn't an UpperCamelCase identifier. Try changing the name to follow the UpperCamelCase style. - camel_case_types
+   info - lib\components\atoms\image_atom.dart:52:36 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\components\atoms\logo.dart:34:43 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\components\atoms\logo.dart:41:18 - Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation. - prefer_const_constructors
+   info - lib\components\atoms\logo.dart:44:20 - Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation. - prefer_const_constructors
+   info - lib\components\atoms\logo.dart:48:25 - Use 'const' literals as arguments to constructors of '@immutable' classes. Try adding 'const' before the literal. - prefer_const_literals_to_create_immutables
+   info - lib\components\atoms\logo.dart:49:17 - Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation. - prefer_const_constructors
+   info - lib\components\atoms\logo.dart:53:17 - Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation. - prefer_const_constructors
+   info - lib\components\atoms\toggle_switch.dart:141:10 - Unnecessary empty statement. Try removing the empty statement or restructuring the code. - empty_statements
+   info - lib\components\molecules\dropdown.dart:79:41 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\components\molecules\dropdown.dart:92:47 - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+   info - lib\components\molecules\qr_login.dart:77:28 - Use 'const' with the constructor to improve performance. Try adding the 'const' keyword to the constructor invocation. - prefer_const_constructors
+
+27 issues found.
