@@ -150,13 +150,15 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
                   ),
                   if (widget.label != null) ...[
                     const SizedBox(width: 14),
-                    Text(
-                      widget.label!,
-                      style: TextStyle(
-                        color: widget.disabled ? Colors.grey : widget.labelColor,
-                        fontSize: 30, // Slightly larger for professional look
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.2,
+                    Flexible(
+                      child: Text(
+                        widget.label!,
+                        style: TextStyle(
+                          color: widget.disabled ? Colors.grey : widget.labelColor,
+                          fontSize: 30, // Slightly larger for professional look
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.2,
+                        ),
                       ),
                     ),
                   ],

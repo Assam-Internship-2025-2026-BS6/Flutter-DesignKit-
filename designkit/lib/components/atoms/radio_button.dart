@@ -73,12 +73,14 @@ class RadioButton extends StatelessWidget {
                     ),
                   ),
                   SizedBox(width: 12 * scaleFactor),
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: fontSize,
-                      fontWeight: fontWeight,
-                      color: labelColor,
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: fontSize,
+                        fontWeight: fontWeight,
+                        color: labelColor,
+                      ),
                     ),
                   ),
                 ],

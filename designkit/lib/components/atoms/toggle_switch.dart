@@ -110,12 +110,14 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
               ),
               if (widget.label != null) ...[
                 const SizedBox(width: 12),
-                Text(
-                  widget.label!,
-                  style: TextStyle(
-                    color: widget.labelColor,
-                    fontSize: widget.fontSize,
-                    fontWeight: FontWeight.w600,
+                Flexible(
+                  child: Text(
+                    widget.label!,
+                    style: TextStyle(
+                      color: widget.labelColor,
+                      fontSize: widget.fontSize,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
