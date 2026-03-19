@@ -99,108 +99,145 @@ class _TextFieldState extends State<TextField> {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: widget.offset,
-      child: SizedBox(
-        width: widget.width != null && widget.width! > 850 ? 850 : widget.width,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            MouseRegion(
-              onEnter: (_) => setState(() => _isHovering = true),
-              onExit: (_) => setState(() => _isHovering = false),
-              child: SizedBox(
-                height: widget.height,
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 150),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: _isHovering
-                        ? const Color(0x26FFFFFF).withValues(alpha: 0.1)
-                        : const Color(0x26FFFFFF),
-                    borderRadius: BorderRadius.circular(AppRadius.circular),
-                    border: Border.all(
-                      color: (hasError && widget.showErrorText) 
-                          ? Colors.red 
-                          : Colors.black.withValues(alpha: 0.2), // Darker border for visibility
-                      width: 2.0, // Thicker border
-                    ),
-                  ),
-                  child: Opacity(
-                    opacity: widget.enabled ? 1.0 : 0.5,
-                    child: m.TextField(
-                        enabled: widget.enabled,
-                        controller: _controller,
-                        obscureText: widget.isPassword ? _obscureText : false,
-                        maxLines: widget.isPassword ? 1 : null,
-                        maxLength: widget.maxLength,
-                        inputFormatters: widget.inputFormatters,
-                        onChanged: _validate,
-                        style: TextStyle(
-                          fontSize: AppTypography.fontLarge,
-                          color: widget.textColor,
-                          fontWeight: widget.fontWeight,
-                          fontFamily: AppTypography.fontFamily,
-                          height: 1.2,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double canvasWidth =
+            constraints.maxWidth.isFinite ? constraints.maxWidth : 1440.0;
+        final double canvasHeight =
+            constraints.maxHeight.isFinite ? constraints.maxHeight : 1024.0;
+
+        final double dynMaxWidth =
+            (canvasWidth - widget.offset.dx.abs()).clamp(0.0, double.infinity);
+        final double dynMaxHeight =
+            (canvasHeight - widget.offset.dy.abs()).clamp(0.0, double.infinity);
+
+        final double maxSafeDx = (canvasWidth - dynMaxWidth) / 2.0;
+        final double maxSafeDy = (canvasHeight - dynMaxHeight) / 2.0;
+
+        final double clampedX = widget.offset.dx.clamp(-maxSafeDx, maxSafeDx);
+        final double clampedY = widget.offset.dy.clamp(-maxSafeDy, maxSafeDy);
+
+        final widthOr850 = widget.width != null && widget.width! > 850
+            ? 850.0
+            : (widget.width ?? double.infinity);
+
+        // Make sure the requested width does not exceed the dynamic bounds
+        final finalWidth = widthOr850 > dynMaxWidth ? dynMaxWidth : widthOr850;
+
+        return Transform.translate(
+          offset: Offset(clampedX, clampedY),
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: dynMaxWidth,
+              maxHeight: dynMaxHeight,
+            ),
+            child: SizedBox(
+              width: finalWidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MouseRegion(
+                    onEnter: (_) => setState(() => _isHovering = true),
+                    onExit: (_) => setState(() => _isHovering = false),
+                    child: SizedBox(
+                      height: widget.height,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: _isHovering
+                              ? const Color(0x26FFFFFF).withValues(alpha: 0.1)
+                              : const Color(0x26FFFFFF),
+                          borderRadius: BorderRadius.circular(AppRadius.circular),
+                          border: Border.all(
+                            color: (hasError && widget.showErrorText)
+                                ? Colors.red
+                                : Colors.black.withValues(alpha: 0.2),
+                            width: 2.0,
+                          ),
                         ),
-                        textAlignVertical: widget.isPassword ? TextAlignVertical.center : TextAlignVertical.top,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          counterText: "",
-                          hintText: widget.hintText,
-                          hintStyle: TextStyle(
-                            color: AppColors.black.withValues(alpha: 0.3),
-                            fontSize: AppTypography.fontLarge,
-                            fontFamily: AppTypography.fontFamily,
-                            fontWeight: FontWeight.w500, // Slightly thicker hint text
-                            height: 1.0,
+                        child: Opacity(
+                          opacity: widget.enabled ? 1.0 : 0.5,
+                          child: m.TextField(
+                            enabled: widget.enabled,
+                            controller: _controller,
+                            obscureText: widget.isPassword ? _obscureText : false,
+                            maxLines: widget.isPassword ? 1 : null,
+                            maxLength: widget.maxLength,
+                            inputFormatters: widget.inputFormatters,
+                            onChanged: _validate,
+                            style: TextStyle(
+                              fontSize: AppTypography.fontLarge,
+                              color: widget.textColor,
+                              fontWeight: widget.fontWeight,
+                              fontFamily: AppTypography.fontFamily,
+                              height: 1.2,
+                            ),
+                            textAlignVertical: widget.isPassword
+                                ? TextAlignVertical.center
+                                : TextAlignVertical.top,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              counterText: "",
+                              hintText: widget.hintText,
+                              hintStyle: TextStyle(
+                                color: AppColors.black.withValues(alpha: 0.3),
+                                fontSize: AppTypography.fontLarge,
+                                fontFamily: AppTypography.fontFamily,
+                                fontWeight: FontWeight.w500,
+                                height: 1.0,
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.large,
+                                vertical: 10.0,
+                              ),
+                              border: InputBorder.none,
+                              suffixIcon: widget.isPassword
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(right: 12),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          _obscureText
+                                              ? Icons.visibility_off_outlined
+                                              : Icons.visibility_outlined,
+                                          color: Colors.black87,
+                                          size: 20,
+                                        ),
+                                        onPressed: widget.enabled
+                                            ? () {
+                                                setState(() {
+                                                  _obscureText = !_obscureText;
+                                                });
+                                              }
+                                            : null,
+                                      ),
+                                    )
+                                  : null,
+                            ),
                           ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.large,
-                            vertical: 10.0,
-                          ),
-                          border: InputBorder.none,
-                          suffixIcon: widget.isPassword
-                              ? Padding(
-                                  padding: const EdgeInsets.only(right: 12),
-                                  child: IconButton(
-                                    icon: Icon(
-                                      _obscureText
-                                          ? Icons.visibility_off_outlined
-                                          : Icons.visibility_outlined,
-                                      color: Colors.black87,
-                                      size: 20,
-                                    ),
-                                    onPressed: widget.enabled ? () {
-                                      setState(() {
-                                        _obscureText = !_obscureText;
-                                      });
-                                    } : null,
-                                  ),
-                                )
-                              : null,
                         ),
                       ),
+                    ),
                   ),
-                  ),
+                  if (hasError && widget.showErrorText) ...[
+                    const SizedBox(height: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(left: AppSpacing.large),
+                      child: dk.Text(
+                        text: _errorText!,
+                        color: Colors.red,
+                        fontSize: AppTypography.fontMedium,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
-            if (hasError && widget.showErrorText) ...[
-              const SizedBox(height: 8),
-               Padding(
-                 padding: const EdgeInsets.only(left: AppSpacing.large),
-                 child: dk.Text(
-                   text: _errorText!,
-                   color: Colors.red,
-                   fontSize: AppTypography.fontMedium,
-                   fontWeight: FontWeight.w500,
-                 ),
-               ),
-            ],
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

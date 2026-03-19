@@ -93,81 +93,107 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
         ? widget.activeColor.withValues(alpha: 0.3) 
         : widget.activeColor;
         
-    return Transform.translate(
-      offset: widget.offset,
-      child: MouseRegion(
-        cursor: widget.disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
-        child: GestureDetector(
-          onTap: _handleTap,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double canvasWidth =
+            constraints.maxWidth.isFinite ? constraints.maxWidth : 1440.0;
+        final double canvasHeight =
+            constraints.maxHeight.isFinite ? constraints.maxHeight : 1024.0;
+
+        final double dynMaxWidth =
+            (canvasWidth - widget.offset.dx.abs()).clamp(0.0, double.infinity);
+        final double dynMaxHeight =
+            (canvasHeight - widget.offset.dy.abs()).clamp(0.0, double.infinity);
+
+        final double maxSafeDx = (canvasWidth - dynMaxWidth) / 2.0;
+        final double maxSafeDy = (canvasHeight - dynMaxHeight) / 2.0;
+
+        final double clampedX = widget.offset.dx.clamp(-maxSafeDx, maxSafeDx);
+        final double clampedY = widget.offset.dy.clamp(-maxSafeDy, maxSafeDy);
+
+        return Transform.translate(
+          offset: Offset(clampedX, clampedY),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.transparent, // Placeholder for ripple container if needed
-              borderRadius: BorderRadius.circular(10),
+            constraints: BoxConstraints(
+              maxWidth: dynMaxWidth,
+              maxHeight: dynMaxHeight,
             ),
-            child: Transform.scale(
-              scale: widget.size,
-              alignment: Alignment.centerLeft, // Alignment centerLeft for natural expansion
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Outer Border
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        width: 26,
-                        height: 26,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: _isSelected ? activeColor : Colors.grey.shade400,
-                            width: 2,
-                          ),
-                          color: _isSelected ? activeColor : Colors.white,
-                          boxShadow: _isSelected && !widget.disabled
-                              ? [
-                                  BoxShadow(
-                                    color: activeColor.withValues(alpha: 0.3),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
-                                  )
-                                ]
-                              : [],
-                        ),
-                      ),
-                      // Checkmark
-                      ScaleTransition(
-                        scale: _scaleAnimation,
-                        child: const Icon(
-                          Icons.check_rounded,
-                          size: 20,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+            child: MouseRegion(
+              cursor: widget.disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: _handleTap,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent, // Placeholder for ripple container if needed
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  if (widget.label != null) ...[
-                    const SizedBox(width: 14),
-                    Flexible(
-                      child: Text(
-                        widget.label!,
-                        style: TextStyle(
-                          color: widget.disabled ? Colors.grey : widget.labelColor,
-                          fontSize: 30, // Slightly larger for professional look
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.2,
+                  child: Transform.scale(
+                    scale: widget.size,
+                    alignment: Alignment.centerLeft, // Alignment centerLeft for natural expansion
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Outer Border
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              width: 26,
+                              height: 26,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: _isSelected ? activeColor : Colors.grey.shade400,
+                                  width: 2,
+                                ),
+                                color: _isSelected ? activeColor : Colors.white,
+                                boxShadow: _isSelected && !widget.disabled
+                                    ? [
+                                        BoxShadow(
+                                          color: activeColor.withValues(alpha: 0.3),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 4),
+                                        )
+                                      ]
+                                    : [],
+                              ),
+                            ),
+                            // Checkmark
+                            ScaleTransition(
+                              scale: _scaleAnimation,
+                              child: const Icon(
+                                Icons.check_rounded,
+                                size: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
+                        if (widget.label != null) ...[
+                          const SizedBox(width: 14),
+                          Flexible(
+                            child: Text( // Ensuring text doesn't overflow implicitly
+                              widget.label!,
+                              style: TextStyle(
+                                color: widget.disabled ? Colors.grey : widget.labelColor,
+                                fontSize: 30, // Slightly larger for professional look
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.2,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
-                  ],
-                ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

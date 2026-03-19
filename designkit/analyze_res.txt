@@ -1,0 +1,22 @@
+﻿Analyzing designkit...                                          
+
+warning - Unused import: '../../core/tokens/typography.dart' - lib\components\atoms\dropdown.dart:4:8 - unused_import
+   info - The type name 'dkImage' isn't an UpperCamelCase identifier - lib\components\atoms\image_atom.dart:4:7 - camel_case_types
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\components\atoms\image_atom.dart:52:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\components\atoms\logo.dart:34:43 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\components\atoms\logo.dart:41:18 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\components\atoms\logo.dart:44:20 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\components\atoms\logo.dart:48:25 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\components\atoms\logo.dart:49:17 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\components\atoms\logo.dart:53:17 - prefer_const_constructors
+warning - The name TextOverflow is shown, but isn't used - lib\components\atoms\text.dart:2:114 - unused_shown_name
+warning - The name Alignment is shown, but isn't used - lib\components\atoms\text.dart:2:158 - unused_shown_name
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\components\molecules\dropdown.dart:79:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\components\molecules\dropdown.dart:92:47 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\components\molecules\qr_login.dart:77:28 - prefer_const_constructors
+warning - Unused import: '../atoms/text_field.dart' - lib\components\organisms\landing_form.dart:2:8 - unused_import
+warning - The value of the local variable 'gap' isn't used - lib\components\organisms\landing_form.dart:48:22 - unused_local_variable
+warning - The value of the local variable 'smallGap' isn't used - lib\components\organisms\landing_form.dart:49:22 - unused_local_variable
+warning - Unused import: 'package:flutter/material.dart' - lib\core\tokens\radius.dart:1:8 - unused_import
+warning - Unused import: 'package:flutter/material.dart' - lib\core\tokens\spacing.dart:1:8 - unused_import
+
