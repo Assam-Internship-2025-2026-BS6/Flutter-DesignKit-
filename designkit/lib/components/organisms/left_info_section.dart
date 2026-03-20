@@ -8,11 +8,13 @@ import '../../core/tokens/spacing.dart';
 class LeftInfoSection extends StatelessWidget {
   final double? width;
   final double? height;
+  final String leftImagePath;
 
   const LeftInfoSection({
     super.key,
     this.width,
     this.height,
+    this.leftImagePath = 'assets/left_image.png',
   });
 
   @override
@@ -20,9 +22,9 @@ class LeftInfoSection extends StatelessWidget {
     Widget content = Container(
       width: width,
       height: height,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/left_image.png'),
+          image: AssetImage(leftImagePath),
           fit: BoxFit.cover,
         ),
       ),

@@ -8,6 +8,8 @@ class PasswordField extends StatelessWidget {
   final String hintText;
   final double? width;
   final Offset offset;
+  final Color labelColor;
+  final double labelScale;
 
   const PasswordField({
     super.key,
@@ -15,6 +17,8 @@ class PasswordField extends StatelessWidget {
     required this.hintText,
     this.width,
     this.offset = Offset.zero,
+    this.labelColor = Colors.black,
+    this.labelScale = 1.0,
   });
 
   @override
@@ -27,8 +31,8 @@ class PasswordField extends StatelessWidget {
       children: [
         dk.Text(
           text: label,
-          color: Colors.black,
-          fontSize: AppTypography.fontMedium,
+          color: labelColor,
+          fontSize: AppTypography.fontMedium * labelScale,
           fontWeight: FontWeight.bold,
         ),
         const SizedBox(height: 6),

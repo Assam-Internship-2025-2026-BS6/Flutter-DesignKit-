@@ -56,6 +56,18 @@ class QrLogin extends StatefulWidget {
   /// Positional offset applied to the entire widget.
   final Offset offset;
 
+  /// Text color.
+  final Color textColor;
+
+  /// Text scale multiplier.
+  final double textScale;
+
+  /// Subtitle color.
+  final Color subtitleColor;
+
+  /// Subtitle scale multiplier.
+  final double subtitleScale;
+
   const QrLogin({
     super.key,
     required this.title,
@@ -70,6 +82,10 @@ class QrLogin extends StatefulWidget {
     this.blur = 15,
     this.opacity = 0.2,
     this.offset = Offset.zero,
+    this.textColor = Colors.black,
+    this.textScale = 1.0,
+    this.subtitleColor = Colors.black,
+    this.subtitleScale = 1.0,
   });
 
   @override
@@ -238,9 +254,9 @@ class _QrLoginState extends State<QrLogin> {
         dk.Text(
           text: widget.title,
           maxLines: 1,
-          fontSize: titleSize,
+          fontSize: titleSize * widget.textScale,
           fontWeight: FontWeight.bold,
-          color: AppColors.black,
+          color: widget.textColor,
         ),
 
         // Subtitle — only visible when card is tall enough
@@ -249,8 +265,8 @@ class _QrLoginState extends State<QrLogin> {
           dk.Text(
             text: widget.subtitle,
             maxLines: widget.height > 100 ? 2 : 1,
-            fontSize: isSmall ? AppTypography.fontSmall : AppTypography.fontMedium,
-            color: AppColors.black.withValues(alpha: 0.87),
+            fontSize: (isSmall ? AppTypography.fontSmall : AppTypography.fontMedium) * widget.subtitleScale,
+            color: widget.subtitleColor,
           ),
         ],
       ],

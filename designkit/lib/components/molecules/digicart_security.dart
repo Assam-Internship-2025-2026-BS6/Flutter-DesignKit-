@@ -121,31 +121,29 @@ class _DigicartSecurityState extends State<DigicartSecurity> {
   /// Builds the title and subtitle text column on the left.
   /// Uses [FittedBox] to scale down text if the card is too narrow.
   Widget _buildTextColumn() {
-    return Expanded(
-      child: FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.centerLeft,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title — regular weight, brand blue color
-            dk.Text(
-              text: widget.title,
-              color: const Color(0xFF004C8F),
-              fontSize: 19,
-            ),
-            const SizedBox(height: 6),
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerLeft,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title — regular weight, brand blue color
+          dk.Text(
+            text: widget.title,
+            color: const Color(0xFF004C8F),
+            fontSize: 19,
+          ),
+          const SizedBox(height: 6),
 
-            // Subtitle — bold, same brand blue color
-            dk.Text(
-              text: widget.subtitle,
-              color: const Color(0xFF004C8F),
-              fontWeight: FontWeight.bold,
-              fontSize: AppTypography.fontLargePlus,
-            ),
-          ],
-        ),
+          // Subtitle — bold, same brand blue color
+          dk.Text(
+            text: widget.subtitle,
+            color: const Color(0xFF004C8F),
+            fontWeight: FontWeight.bold,
+            fontSize: AppTypography.fontLargePlus,
+          ),
+        ],
       ),
     );
   }
