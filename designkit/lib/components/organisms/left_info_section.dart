@@ -9,10 +9,17 @@ class LeftInfoSection extends StatelessWidget {
   final double? width;
   final double? height;
 
+  final String leftImagePath;
+  final String textSize;
+  final Color textColor;
+
   const LeftInfoSection({
     super.key,
     this.width,
     this.height,
+    this.leftImagePath = 'assets/left_image.png',
+    this.textSize = 'Medium',
+    this.textColor = Colors.white,
   });
 
   @override
@@ -20,15 +27,20 @@ class LeftInfoSection extends StatelessWidget {
     Widget content = Container(
       width: width,
       height: height,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage('assets/left_image.png'),
+          image: AssetImage(leftImagePath),
           fit: BoxFit.cover,
         ),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
           final isSmall = constraints.maxWidth < 600;
+
+          double textScale = 1.0;
+          if (textSize == 'Small') textScale = 0.8;
+          if (textSize == 'Large') textScale = 1.2;
+
           return Padding(
             padding: EdgeInsets.symmetric(
               vertical: AppSpacing.none,
@@ -44,16 +56,16 @@ class LeftInfoSection extends StatelessWidget {
                     dk.Text(
                       text: "Digital Arrest is Fake!",
                       textAlign: TextAlign.center,
-                      fontSize: isSmall ? AppTypography.fontH2 : AppTypography.fontExtraLarge,
+                      fontSize: (isSmall ? AppTypography.fontH2 : AppTypography.fontExtraLarge) * textScale,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.white,
+                      color: textColor,
                     ),
                     const SizedBox(height: 10),
                     dk.Text(
                       text: "Genuine officers will never detain you\nor ask for money",
                       textAlign: TextAlign.center,
-                      fontSize: isSmall ? AppTypography.fontLarge : AppTypography.fontLargePlus,
-                      color: AppColors.white.withAlpha(178), // 0.7 * 255
+                      fontSize: (isSmall ? AppTypography.fontLarge : AppTypography.fontLargePlus) * textScale,
+                      color: textColor.withAlpha(178), // 0.7 * 255
                     ),
                   ],
                 ),
@@ -64,16 +76,16 @@ class LeftInfoSection extends StatelessWidget {
                     dk.Text(
                       text: "When in doubt reach out to your bank.",
                       textAlign: TextAlign.center,
-                      fontSize: isSmall ? AppTypography.fontLarge : AppTypography.fontLargePlus,
+                      fontSize: (isSmall ? AppTypography.fontLarge : AppTypography.fontLargePlus) * textScale,
                       fontWeight: FontWeight.w500,
-                      color: AppColors.white,
+                      color: textColor,
                     ),
                     const SizedBox(height: 8),
                     dk.Text(
                       text: "Click here to know more about Investment and APK Fraud",
                       textAlign: TextAlign.center,
-                      fontSize: isSmall ? AppTypography.fontMedium : AppTypography.fontLarge,
-                      color: AppColors.white.withAlpha(153), // 0.6 * 255
+                      fontSize: (isSmall ? AppTypography.fontMedium : AppTypography.fontLarge) * textScale,
+                      color: textColor.withAlpha(153), // 0.6 * 255
                     ),
                     const SizedBox(height: 30),
                     

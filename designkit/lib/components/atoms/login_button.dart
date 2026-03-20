@@ -9,15 +9,19 @@ class LoginButton extends StatefulWidget {
   final Color color;
   final String text;
   final bool disabled;
+  final double fontSize;
+  final double borderRadius;
 
   const LoginButton({
     super.key,
     required this.onTap,
     this.width = 483.0,
     this.height = 63.0,
-    this.color = AppColors.hdfcBlue,
+    this.color = const Color(0xFF1E1E4C), // Use HDFC default or preset color mapping
     this.text = "Login",
     this.disabled = false,
+    this.fontSize = 25.0,
+    this.borderRadius = 30.0,
   });
 
   @override
@@ -79,7 +83,7 @@ class _LoginButtonState extends State<LoginButton>
             height: widget.height,
             decoration: BoxDecoration(
               color: widget.color,
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(widget.borderRadius),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withAlpha(20), // 0.08 * 255
@@ -92,7 +96,7 @@ class _LoginButtonState extends State<LoginButton>
             child: dk.Text(
               text: widget.text,
               color: AppColors.white,
-              fontSize: 25,
+              fontSize: widget.fontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
