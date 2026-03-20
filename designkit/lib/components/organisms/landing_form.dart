@@ -151,6 +151,7 @@ class _LandingFormOrganismState extends State<LandingFormOrganism> {
                           width: double.infinity,
                           height: isVeryShort ? 70 : 85,
                           opacity: 0.3,
+                          onTap: () => debugPrint("Digicart Security Tapped"),
                         ),
 
                         /// KEEP ME LOGGED IN
