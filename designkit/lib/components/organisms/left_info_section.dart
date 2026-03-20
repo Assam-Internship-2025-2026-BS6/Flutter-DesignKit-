@@ -111,4 +111,3 @@ class LeftInfoSection extends StatelessWidget {
     return content;
   }
 }
-
