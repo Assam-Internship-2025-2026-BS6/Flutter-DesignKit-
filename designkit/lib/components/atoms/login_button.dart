@@ -10,6 +10,7 @@ class LoginButton extends StatefulWidget {
   final String text;
   final bool disabled;
   final double fontSize;
+  final FontWeight fontWeight;
 
   const LoginButton({
     super.key,
@@ -20,6 +21,7 @@ class LoginButton extends StatefulWidget {
     this.text = "Login",
     this.disabled = false,
     this.fontSize = 25.0,
+    this.fontWeight = FontWeight.normal,
   });
 
   @override
@@ -49,6 +51,9 @@ class _LoginButtonState extends State<LoginButton>
     super.dispose();
   }
 
+  bool _isFocused = false;
+  bool _isHovering = false;
+
   void _handleTapDown(TapDownDetails details) {
     if (!widget.disabled) {
       _animationController.forward();
@@ -66,36 +71,69 @@ class _LoginButtonState extends State<LoginButton>
     _animationController.reverse();
   }
 
+  void _handleActivate() {
+    if (!widget.disabled) {
+      _animationController.forward().then((_) => _animationController.reverse());
+      widget.onTap();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Opacity(
       opacity: widget.disabled ? 0.5 : 1,
-      child: GestureDetector(
-        onTapDown: _handleTapDown,
-        onTapUp: _handleTapUp,
-        onTapCancel: _handleTapCancel,
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: Container(
-            width: widget.width,
-            height: widget.height,
-            decoration: BoxDecoration(
-              color: widget.color,
-              borderRadius: BorderRadius.circular(30),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withAlpha(20), // 0.08 * 255
-                  offset: const Offset(0, 4),
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-            alignment: Alignment.center,
-            child: dk.Text(
-              text: widget.text,
-              color: AppColors.white,
-              fontSize: widget.fontSize,
-              fontWeight: FontWeight.bold,
+      child: FocusableActionDetector(
+        enabled: !widget.disabled,
+        mouseCursor: widget.disabled
+            ? SystemMouseCursors.basic
+            : SystemMouseCursors.click,
+        onShowFocusHighlight: (value) {
+          setState(() => _isFocused = value);
+        },
+        onShowHoverHighlight: (value) {
+          setState(() => _isHovering = value);
+        },
+        actions: {
+          ActivateIntent: CallbackAction<ActivateIntent>(
+            onInvoke: (_) => _handleActivate(),
+          ),
+        },
+        child: GestureDetector(
+          onTapDown: _handleTapDown,
+          onTapUp: _handleTapUp,
+          onTapCancel: _handleTapCancel,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: Container(
+              width: widget.width,
+              height: widget.height,
+              decoration: BoxDecoration(
+                color: widget.color,
+                borderRadius: BorderRadius.circular(30),
+                border: _isFocused
+                    ? Border.all(color: Colors.white.withValues(alpha: 0.8), width: 2)
+                    : null,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withAlpha(20), // 0.08 * 255
+                    offset: const Offset(0, 4),
+                    blurRadius: 4,
+                  ),
+                  if (_isFocused || _isHovering)
+                    BoxShadow(
+                      color: widget.color.withValues(alpha: 0.4),
+                      blurRadius: 12,
+                      spreadRadius: 2,
+                    ),
+                ],
+              ),
+              alignment: Alignment.center,
+              child: dk.Text(
+                text: widget.text,
+                color: AppColors.white,
+                fontSize: widget.fontSize,
+                fontWeight: widget.fontWeight,
+              ),
             ),
           ),
         ),

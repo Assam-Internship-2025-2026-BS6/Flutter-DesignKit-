@@ -8,6 +8,8 @@ class ToggleSwitch extends StatefulWidget {
   final Color labelColor;
   final double size;
   final double fontSize;
+  final FontWeight fontWeight;
+  final bool disabled;
   final Offset offset;
 
   const ToggleSwitch({
@@ -19,6 +21,8 @@ class ToggleSwitch extends StatefulWidget {
     this.labelColor = Colors.black87,
     this.size = 1.0,
     this.fontSize = 20.0,
+    this.fontWeight = FontWeight.normal,
+    this.disabled = false,
     this.offset = Offset.zero,
   });
 
@@ -42,6 +46,8 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
       _internalValue = widget.value;
     }
   }
+
+  bool _isFocused = false;
 
   void _handleTap() {
     if (widget.onChanged != null) {
@@ -83,68 +89,97 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
             child: Transform.scale(
               scale: widget.size,
               alignment: Alignment.centerLeft,
-              child: GestureDetector(
-                onTap: _handleTap,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AnimatedContainer(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                      width: 50,
-                      height: 28,
+              child: FocusableActionDetector(
+                enabled: !widget.disabled,
+                mouseCursor: widget.disabled ? SystemMouseCursors.basic : SystemMouseCursors.click,
+                onShowFocusHighlight: (value) {
+                  setState(() => _isFocused = value);
+                },
+                actions: {
+                  ActivateIntent: CallbackAction<ActivateIntent>(
+                    onInvoke: (_) => widget.disabled ? null : _handleTap(),
+                  ),
+                },
+                child: GestureDetector(
+                  onTap: widget.disabled ? null : _handleTap,
+                  child: Opacity(
+                    opacity: widget.disabled ? 0.5 : 1.0,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
+                        color: _isFocused
+                            ? widget.activeColor.withValues(alpha: 0.1)
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
-                        color: _internalValue ? widget.activeColor : Colors.grey.shade300,
-                        boxShadow: [
-                          if (_internalValue)
-                            BoxShadow(
-                              color: widget.activeColor.withValues(alpha: 0.3),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                        ],
+                        border: _isFocused
+                            ? Border.all(color: widget.activeColor.withValues(alpha: 0.5), width: 1)
+                            : null,
                       ),
-                      child: Stack(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          AnimatedPositioned(
+                          AnimatedContainer(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
-                            left: _internalValue ? 24 : 4,
-                            top: 4,
-                            child: Container(
-                              width: 20,
-                              height: 20,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                                boxShadow: [
+                            width: 50,
+                            height: 28,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: _internalValue 
+                                ? (widget.disabled ? widget.activeColor.withValues(alpha: 0.5) : widget.activeColor) 
+                                : Colors.grey.shade300,
+                              boxShadow: [
+                                if ((_internalValue || _isFocused) && !widget.disabled)
                                   BoxShadow(
-                                    color: Colors.black12,
-                                    blurRadius: 2,
-                                    offset: Offset(0, 2),
+                                    color: widget.activeColor.withValues(alpha: 0.3),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
                                   ),
-                                ],
-                              ),
+                              ],
+                            ),
+                            child: Stack(
+                              children: [
+                                AnimatedPositioned(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                  left: _internalValue ? 24 : 4,
+                                  top: 4,
+                                  child: Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black12,
+                                          blurRadius: 2,
+                                          offset: Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
+                          if (widget.label != null) ...[
+                            const SizedBox(width: 12),
+                            Flexible(
+                              child: Text(
+                                widget.label!,
+                                style: TextStyle(
+                                  color: widget.labelColor,
+                                  fontSize: widget.fontSize,
+                                  fontWeight: widget.fontWeight,
+                                ),
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
-                    if (widget.label != null) ...[
-                      const SizedBox(width: 12),
-                      Flexible(
-                        child: Text(
-                          widget.label!,
-                          style: TextStyle(
-                            color: widget.labelColor,
-                            fontSize: widget.fontSize,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ],
+                  ),
                 ),
               ),
             ),

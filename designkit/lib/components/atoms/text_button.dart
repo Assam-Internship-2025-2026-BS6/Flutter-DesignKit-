@@ -8,6 +8,7 @@ class TextButton extends StatefulWidget {
   final double fontSize;
   final bool isClickable;
   final bool enableHover;
+  final FontWeight fontWeight;
   final Offset offset;
 
   const TextButton({
@@ -16,6 +17,7 @@ class TextButton extends StatefulWidget {
     required this.onPressed,
     this.color,
     this.fontSize = 40,
+    this.fontWeight = FontWeight.normal,
     this.isClickable = true,
     this.enableHover = true,
     this.offset = Offset.zero,
@@ -27,6 +29,7 @@ class TextButton extends StatefulWidget {
 
 class _TextButtonState extends State<TextButton> {
   bool _isHovering = false;
+  bool _isFocused = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,38 +61,41 @@ class _TextButtonState extends State<TextButton> {
               maxWidth: dynMaxWidth,
               maxHeight: dynMaxHeight,
             ),
-            child: MouseRegion(
-              cursor: effectiveClickable
+            child: FocusableActionDetector(
+              enabled: effectiveClickable,
+              mouseCursor: effectiveClickable
                   ? SystemMouseCursors.click
                   : SystemMouseCursors.basic,
-              onEnter: (_) {
-                if (widget.enableHover && effectiveClickable) {
-                  setState(() => _isHovering = true);
+              onShowHoverHighlight: (value) {
+                if (widget.enableHover) {
+                  setState(() => _isHovering = value);
                 }
               },
-              onExit: (_) {
-                if (widget.enableHover && effectiveClickable) {
-                  setState(() => _isHovering = false);
-                }
+              onShowFocusHighlight: (value) {
+                setState(() => _isFocused = value);
               },
-              child: GestureDetector(
-                onTap: effectiveClickable ? widget.onPressed : null,
-                child: AnimatedDefaultTextStyle(
-                  duration: const Duration(milliseconds: 150),
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: widget.fontSize,
-                    height: 1.0,
-                    letterSpacing: 0,
-                    color: _isHovering
-                        ? baseColor.withValues(alpha: 0.8)
-                        : baseColor,
-                    decoration: _isHovering && widget.enableHover
-                        ? TextDecoration.underline
-                        : TextDecoration.none,
-                  ),
-                  child: m.Text(widget.text), // Text bounded naturally
+              actions: {
+                ActivateIntent: CallbackAction<ActivateIntent>(
+                  onInvoke: (_) => widget.onPressed(),
                 ),
+              },
+              child: AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 150),
+                style: TextStyle(
+                  fontWeight: widget.fontWeight,
+                  fontSize: widget.fontSize,
+                  height: 1.0,
+                  letterSpacing: 0,
+                  color: (_isHovering || _isFocused)
+                      ? baseColor.withValues(alpha: 0.8)
+                      : baseColor,
+                  decoration: (_isHovering || _isFocused) && widget.enableHover
+                      ? TextDecoration.underline
+                      : TextDecoration.none,
+                  decorationThickness: 2,
+                  decorationColor: baseColor.withValues(alpha: 0.5),
+                ),
+                child: m.Text(widget.text), // Text bounded naturally
               ),
             ),
           ),

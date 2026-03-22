@@ -19,7 +19,9 @@ class TextField extends StatefulWidget {
   final Color textColor;
   final FontWeight fontWeight;
   final bool enabled;
+  final double fontSize;
   final Offset offset;
+  final EdgeInsetsGeometry? contentPadding;
 
   const TextField({
     super.key,
@@ -32,9 +34,11 @@ class TextField extends StatefulWidget {
     this.height = 60.0,
     this.showErrorText = true,
     this.textColor = AppColors.black,
-    this.fontWeight = FontWeight.w500,
+    this.fontWeight = FontWeight.normal,
+    this.fontSize = AppTypography.fontLarge,
     this.enabled = true,
     this.offset = Offset.zero,
+    this.contentPadding,
   });
 
   @override
@@ -140,81 +144,85 @@ class _TextFieldState extends State<TextField> {
                   MouseRegion(
                     onEnter: (_) => setState(() => _isHovering = true),
                     onExit: (_) => setState(() => _isHovering = false),
-                    child: SizedBox(
-                      height: widget.height,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 150),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: _isHovering
-                              ? const Color(0x26FFFFFF).withValues(alpha: 0.1)
-                              : const Color(0x26FFFFFF),
-                          borderRadius: BorderRadius.circular(AppRadius.circular),
-                          border: Border.all(
-                            color: (hasError && widget.showErrorText)
-                                ? Colors.red
-                                : Colors.black.withValues(alpha: 0.2),
-                            width: 2.0,
-                          ),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 150),
+                      // For password fields keep a fixed height; for others allow
+                      // the container to grow with content by only setting minHeight.
+                      constraints: widget.isPassword
+                          ? BoxConstraints.tightFor(height: widget.height)
+                          : BoxConstraints(minHeight: widget.height ?? 60.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: _isHovering
+                            ? const Color(0x26FFFFFF).withValues(alpha: 0.1)
+                            : const Color(0x26FFFFFF),
+                        borderRadius: BorderRadius.circular(AppRadius.circular),
+                        border: Border.all(
+                          color: (hasError && widget.showErrorText)
+                              ? Colors.red
+                              : Colors.black.withValues(alpha: 0.2),
+                          width: 2.0,
                         ),
-                        child: Opacity(
-                          opacity: widget.enabled ? 1.0 : 0.5,
-                          child: m.TextField(
-                            enabled: widget.enabled,
-                            controller: _controller,
-                            obscureText: widget.isPassword ? _obscureText : false,
-                            maxLines: widget.isPassword ? 1 : null,
-                            maxLength: widget.maxLength,
-                            inputFormatters: widget.inputFormatters,
-                            onChanged: _validate,
-                            style: TextStyle(
-                              fontSize: AppTypography.fontLarge,
-                              color: widget.textColor,
-                              fontWeight: widget.fontWeight,
+                      ),
+                      child: Opacity(
+                        opacity: widget.enabled ? 1.0 : 0.5,
+                        child: m.TextField(
+                          enabled: widget.enabled,
+                          controller: _controller,
+                          obscureText: widget.isPassword ? _obscureText : false,
+                          maxLines: widget.isPassword ? 1 : null,
+                          minLines: 1,
+                          maxLength: widget.maxLength,
+                          inputFormatters: widget.inputFormatters,
+                          onChanged: _validate,
+                          style: TextStyle(
+                            fontSize: widget.fontSize,
+                            color: widget.textColor,
+                            fontWeight: widget.fontWeight,
+                            fontFamily: AppTypography.fontFamily,
+                            height: 1.2,
+                          ),
+                          textAlignVertical: widget.isPassword
+                              ? TextAlignVertical.center
+                              : TextAlignVertical.top,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            counterText: "",
+                            hintText: widget.hintText,
+                            hintStyle: TextStyle(
+                              color: AppColors.black.withValues(alpha: 0.3),
+                              fontSize: widget.fontSize,
                               fontFamily: AppTypography.fontFamily,
-                              height: 1.2,
+                              fontWeight: FontWeight.w500,
+                              height: 1.0,
                             ),
-                            textAlignVertical: widget.isPassword
-                                ? TextAlignVertical.center
-                                : TextAlignVertical.top,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              counterText: "",
-                              hintText: widget.hintText,
-                              hintStyle: TextStyle(
-                                color: AppColors.black.withValues(alpha: 0.3),
-                                fontSize: AppTypography.fontLarge,
-                                fontFamily: AppTypography.fontFamily,
-                                fontWeight: FontWeight.w500,
-                                height: 1.0,
-                              ),
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacing.large,
-                                vertical: 10.0,
-                              ),
-                              border: InputBorder.none,
-                              suffixIcon: widget.isPassword
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(right: 12),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          _obscureText
-                                              ? Icons.visibility_off_outlined
-                                              : Icons.visibility_outlined,
-                                          color: Colors.black87,
-                                          size: 20,
-                                        ),
-                                        onPressed: widget.enabled
-                                            ? () {
-                                                setState(() {
-                                                  _obscureText = !_obscureText;
-                                                });
-                                              }
-                                            : null,
+                            contentPadding: widget.contentPadding ??
+                                const EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.large,
+                                  vertical: 10.0,
+                                ),
+                            border: InputBorder.none,
+                            suffixIcon: widget.isPassword
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 12),
+                                    child: IconButton(
+                                      icon: Icon(
+                                        _obscureText
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility_outlined,
+                                        color: Colors.black87,
+                                        size: 20,
                                       ),
-                                    )
-                                  : null,
-                            ),
+                                      onPressed: widget.enabled
+                                          ? () {
+                                              setState(() {
+                                                _obscureText = !_obscureText;
+                                              });
+                                            }
+                                          : null,
+                                    ),
+                                  )
+                                : null,
                           ),
                         ),
                       ),

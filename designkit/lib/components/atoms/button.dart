@@ -10,6 +10,7 @@ class Button extends StatefulWidget {
   final Color color;
   final bool disabled;
   final double opacity;
+  final FontWeight fontWeight;
   final Offset offset;
 
   const Button({
@@ -21,6 +22,7 @@ class Button extends StatefulWidget {
     this.color = AppColors.hdfcBlue,
     this.disabled = false,
     this.opacity = 1.0,
+    this.fontWeight = FontWeight.normal,
     this.offset = Offset.zero,
   });
 
@@ -50,6 +52,9 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
+  bool _isFocused = false;
+  bool _isHovering = false;
+
   void _handleTapDown(TapDownDetails details) {
     if (!widget.disabled) {
       _animationController.forward();
@@ -65,6 +70,13 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
 
   void _handleTapCancel() {
     _animationController.reverse();
+  }
+
+  void _handleActivate() {
+    if (!widget.disabled) {
+      _animationController.forward().then((_) => _animationController.reverse());
+      widget.onTap?.call();
+    }
   }
 
   @override
@@ -96,32 +108,58 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
             ),
             child: Opacity(
               opacity: widget.disabled ? 0.5 : widget.opacity,
-              child: GestureDetector(
-                onTapDown: _handleTapDown,
-                onTapUp: _handleTapUp,
-                onTapCancel: _handleTapCancel,
-                child: ScaleTransition(
-                  scale: _scaleAnimation,
-                  child: Container(
-                    width: widget.width > dynMaxWidth ? dynMaxWidth : widget.width,
-                    height: widget.height > dynMaxHeight ? dynMaxHeight : widget.height,
-                    decoration: BoxDecoration(
-                      color: widget.color,
-                      borderRadius: BorderRadius.circular(widget.height / 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withAlpha(20),
-                          offset: const Offset(0, 4),
-                          blurRadius: 4,
-                        ),
-                      ],
-                    ),
-                    alignment: Alignment.center,
-                    child: dk.Text(
-                      text: widget.text,
-                      color: AppColors.white,
-                      fontSize: widget.height * 0.4, // Responsive font size based on height
-                      fontWeight: FontWeight.bold,
+              child: FocusableActionDetector(
+                enabled: !widget.disabled,
+                mouseCursor: widget.disabled
+                    ? SystemMouseCursors.basic
+                    : SystemMouseCursors.click,
+                onShowFocusHighlight: (value) {
+                  setState(() => _isFocused = value);
+                },
+                onShowHoverHighlight: (value) {
+                  setState(() => _isHovering = value);
+                },
+                actions: {
+                  ActivateIntent: CallbackAction<ActivateIntent>(
+                    onInvoke: (_) => _handleActivate(),
+                  ),
+                },
+                child: GestureDetector(
+                  onTapDown: _handleTapDown,
+                  onTapUp: _handleTapUp,
+                  onTapCancel: _handleTapCancel,
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: Container(
+                      width: widget.width > dynMaxWidth ? dynMaxWidth : widget.width,
+                      height: widget.height > dynMaxHeight ? dynMaxHeight : widget.height,
+                      decoration: BoxDecoration(
+                        color: widget.color,
+                        borderRadius: BorderRadius.circular(widget.height / 2),
+                        border: _isFocused
+                            ? Border.all(color: Colors.white.withAlpha(204), width: 2)
+                            : null,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withAlpha(20),
+                            offset: const Offset(0, 4),
+                            blurRadius: 4,
+                          ),
+                          if (_isFocused || _isHovering)
+                            BoxShadow(
+                              color: widget.color.withAlpha(102),
+                              blurRadius: 12,
+                              spreadRadius: 2,
+                            ),
+                        ],
+                      ),
+                      alignment: Alignment.center,
+                      child: dk.Text(
+                        text: widget.text,
+                        color: AppColors.white,
+                        fontSize: widget.height * 0.4, // Responsive font size based on height
+                        fontWeight: widget.fontWeight,
+                      ),
                     ),
                   ),
                 ),

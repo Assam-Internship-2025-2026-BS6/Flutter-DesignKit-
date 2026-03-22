@@ -9,6 +9,8 @@ class Checkbox extends StatefulWidget {
   final Color activeColor;
   final Color labelColor;
   final double size;
+  final FontWeight fontWeight;
+  final double opacity;
   final Offset offset;
 
   const Checkbox({
@@ -21,6 +23,8 @@ class Checkbox extends StatefulWidget {
     this.activeColor = const Color(0xFF1E1E4C),
     this.labelColor = const Color(0xFF1E1E4C),
     this.size = 1.0,
+    this.fontWeight = FontWeight.normal,
+    this.opacity = 1.0,
     this.offset = Offset.zero,
   });
 
@@ -32,6 +36,7 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late bool _isSelected;
+  bool _isFocused = false;
 
   @override
   void initState() {
@@ -90,7 +95,7 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final Color activeColor = widget.disabled 
-        ? widget.activeColor.withValues(alpha: 0.3) 
+        ? widget.activeColor.withAlpha(77) 
         : widget.activeColor;
         
     return LayoutBuilder(
@@ -113,20 +118,38 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
 
         return Transform.translate(
           offset: Offset(clampedX, clampedY),
-          child: Container(
-            constraints: BoxConstraints(
-              maxWidth: dynMaxWidth,
-              maxHeight: dynMaxHeight,
-            ),
-            child: MouseRegion(
-              cursor: widget.disabled ? SystemMouseCursors.forbidden : SystemMouseCursors.click,
+          child: Opacity(
+            opacity: widget.opacity,
+            child: Container(
+              constraints: BoxConstraints(
+                maxWidth: dynMaxWidth,
+                maxHeight: dynMaxHeight,
+              ),
+            child: FocusableActionDetector(
+              enabled: !widget.disabled,
+              mouseCursor: widget.disabled
+                  ? SystemMouseCursors.forbidden
+                  : SystemMouseCursors.click,
+              onShowFocusHighlight: (value) {
+                setState(() => _isFocused = value);
+              },
+              actions: {
+                ActivateIntent: CallbackAction<ActivateIntent>(
+                  onInvoke: (_) => _handleTap(),
+                ),
+              },
               child: GestureDetector(
                 onTap: _handleTap,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: Colors.transparent, // Placeholder for ripple container if needed
+                    color: _isFocused
+                        ? activeColor.withAlpha(26)
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(10),
+                    border: _isFocused
+                        ? Border.all(color: activeColor.withAlpha(128), width: 1)
+                        : null,
                   ),
                   child: Transform.scale(
                     scale: widget.size,
@@ -149,10 +172,10 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
                                   width: 2,
                                 ),
                                 color: _isSelected ? activeColor : Colors.white,
-                                boxShadow: _isSelected && !widget.disabled
+                                boxShadow: (_isSelected || _isFocused) && !widget.disabled
                                     ? [
                                         BoxShadow(
-                                          color: activeColor.withValues(alpha: 0.3),
+                                          color: activeColor.withAlpha(77),
                                           blurRadius: 10,
                                           offset: const Offset(0, 4),
                                         )
@@ -179,7 +202,7 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
                               style: TextStyle(
                                 color: widget.disabled ? Colors.grey : widget.labelColor,
                                 fontSize: 30, // Slightly larger for professional look
-                                fontWeight: FontWeight.w600,
+                                fontWeight: widget.fontWeight,
                                 letterSpacing: 0.2,
                               ),
                             ),
@@ -190,6 +213,7 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
                   ),
                 ),
               ),
+            ),
             ),
           ),
         );
