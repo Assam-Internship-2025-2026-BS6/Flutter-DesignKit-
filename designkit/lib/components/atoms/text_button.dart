@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart' hide TextButton;
 import 'package:flutter/material.dart' as m show Text;
 
+/// A simple text-based button with hover effects and underline decoration.
+/// 
+/// This widget is ideal for links or secondary actions that don't require 
+/// a full button background.
 class TextButton extends StatefulWidget {
+  /// The text to display.
   final String text;
+
+  /// Callback triggered when the button is pressed.
   final VoidCallback onPressed;
+
+  /// The text color. Defaults to HDFC brand blue if null.
   final Color? color;
+
+  /// The font size of the text.
   final double fontSize;
+
+  /// Whether the button is interactive.
   final bool isClickable;
+
+  /// Whether to show hover effects (underline and opacity shift).
   final bool enableHover;
+
+  /// The typeface thickness.
   final FontWeight fontWeight;
+
+  /// The positional offset of the text button.
   final Offset offset;
 
   const TextButton({

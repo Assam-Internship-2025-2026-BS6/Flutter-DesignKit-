@@ -2,14 +2,33 @@ import 'package:flutter/material.dart' hide Text;
 import 'text.dart' as dk;
 import '../../core/tokens/colors.dart';
 
+/// A specialized login button with a specific design-system layout and style.
+///
+/// Features a large, rounded rectangle design with scale animation and
+/// accessibility support via [FocusableActionDetector].
 class LoginButton extends StatefulWidget {
+  /// Callback triggered when the button is tapped.
   final VoidCallback onTap;
+
+  /// The width of the button.
   final double width;
+
+  /// The height of the button.
   final double height;
+
+  /// The background color of the button.
   final Color color;
+
+  /// The text displayed inside the button.
   final String text;
+
+  /// Whether the button is disabled.
   final bool disabled;
+
+  /// The font size of the button text.
   final double fontSize;
+
+  /// The font weight of the button text.
   final FontWeight fontWeight;
 
   const LoginButton({

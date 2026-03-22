@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart' hide Checkbox;
 
+/// A professional, animated checkbox widget with a customizable label.
+/// 
+/// Provides smooth transitions, professional aesthetics, and various states 
+/// including hover, focus, and disabled.
 class Checkbox extends StatefulWidget {
+  /// The current state of the checkbox.
   final bool value;
+
+  /// An optional text label to display next to the checkbox.
   final String? label;
+
+  /// Callback function when the checkbox value changes.
   final ValueChanged<bool?>? onChanged;
+
+  /// Optional callback for when the checkbox is pressed.
   final VoidCallback? onPressed;
+
+  /// Whether the checkbox is in a disabled state.
   final bool disabled;
+
+  /// The color used when the checkbox is active (checked).
   final Color activeColor;
+
+  /// The text color of the label.
   final Color labelColor;
+
+  /// The relative size scale factor for the whole component.
   final double size;
+
+  /// The font weight of the label text.
   final FontWeight fontWeight;
+
+  /// The overall opacity of the component.
   final double opacity;
+
+  /// The positional offset of the checkbox.
   final Offset offset;
 
   const Checkbox({

@@ -15,37 +15,102 @@ import '../../core/tokens/typography.dart';
 import '../../core/tokens/spacing.dart';
 import '../../core/tokens/radius.dart';
 
+/// A complex organism representing the main login form on the landing page.
+/// 
+/// Features a large glass card containing:
+/// - Branded headers and logos
+/// - QR login integration
+/// - Customer ID and Password fields
+/// - Security banners
+/// - "Keep me logged in" preference
+/// - Primary login button
+/// - Registration footer
 class LandingFormOrganism extends StatefulWidget {
+  /// The total width of the form container.
   final double width;
+
+  /// The total height of the form container.
   final double height;
+
+  /// The base tint color of the glass card.
   final Color tintColor;
+
+  /// Callback for "Set/Reset Password" action.
   final VoidCallback? onSetResetPassword;
+
+  /// Callback for "Register Now" action.
   final VoidCallback? onRegisterNow;
 
+  /// The main heading text.
   final String title;
+
+  /// The supporting brand text.
   final String subtitle;
+
+  /// The label for the customer ID input.
   final String customerIdLabel;
+
+  /// The placeholder for the customer ID input.
   final String customerIdHint;
+
+  /// The label for the password input.
   final String passwordLabel;
+
+  /// The text for the primary login button.
   final String buttonText;
+
+  /// The text for the QR login card.
   final String qrText;
+
+  /// The subtitle for the QR login card.
   final String qrSubtitle;
   
+  /// The size category for the title text.
   final String titleSize;
+
+  /// The color for the title text.
   final Color titleColor;
+
+  /// The size category for the subtitle text.
   final String subtitleSize;
+
+  /// The color for the subtitle text.
   final Color subtitleColor;
+
+  /// The size category for the customer ID text.
   final String customerIdSize;
+
+  /// The color for the customer ID text.
   final Color customerIdColor;
+
+  /// The size category for the password text.
   final String passwordSize;
+
+  /// The color for the password text.
   final Color passwordColor;
+
+  /// The size category for the button text.
   final String buttonSize;
+
+  /// The primary color for buttons and highlights.
   final Color buttonColor;
+
+  /// The size category for the QR text.
   final String qrTextSize;
+
+  /// The color for the QR text.
   final Color qrTextColor;
+
+  /// The size category for the QR subtitle text.
   final String qrSubtitleSize;
+
+  /// The color for the QR subtitle text.
   final Color qrSubtitleColor;
+
+  /// The size category for the checkbox text.
   final String checkboxSize;
+
+  /// The color for the checkbox text.
   final Color checkboxColor;
 
   const LandingFormOrganism({

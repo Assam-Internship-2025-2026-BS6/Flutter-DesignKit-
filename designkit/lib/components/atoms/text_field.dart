@@ -7,20 +7,51 @@ import '../../core/tokens/colors.dart';
 import '../../core/tokens/radius.dart';
 import '../../core/tokens/spacing.dart';
 
+/// A customizable text input atom with support for passwords, validation, and offsets.
+/// 
+/// Features animated hover states, error handling, and integrated boundary 
+/// management to ensure the input field remains within the safe UI area.
 class TextField extends StatefulWidget {
+  /// The placeholder text to display when the input is empty.
   final String hintText;
+
+  /// Whether the input should obscure text (for passwords).
   final bool isPassword;
+
+  /// Optional validation logic for the input text.
   final String? Function(String)? validator;
+
+  /// Optional maximum character length limit.
   final int? maxLength;
+
+  /// Optional list of input formatters.
   final List<TextInputFormatter>? inputFormatters;
+
+  /// The desired width of the field.
   final double? width;
+
+  /// The desired height of the field.
   final double? height;
+
+  /// Whether to display validation error text.
   final bool showErrorText;
+
+  /// The color of the input text.
   final Color textColor;
+
+  /// The thickness of the input text.
   final FontWeight fontWeight;
+
+  /// Whether the field is interactive.
   final bool enabled;
+
+  /// The font size of the input text.
   final double fontSize;
+
+  /// The positional offset of the component.
   final Offset offset;
+
+  /// Custom internal padding for the text input.
   final EdgeInsetsGeometry? contentPadding;
 
   const TextField({

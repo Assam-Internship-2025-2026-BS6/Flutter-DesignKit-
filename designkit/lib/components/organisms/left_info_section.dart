@@ -5,9 +5,19 @@ import '../../core/tokens/colors.dart';
 import '../../core/tokens/typography.dart';
 import '../../core/tokens/spacing.dart';
 
+/// An informational organism typically shown on the left side of a login page.
+/// 
+/// Displays educational content about security and fraud prevention, 
+/// featuring a full-width background image, multi-line text, and a primary 
+/// call-to-action button.
 class LeftInfoSection extends StatelessWidget {
+  /// The optional width of the section.
   final double? width;
+
+  /// The optional height of the section.
   final double? height;
+
+  /// The asset path for the background image.
   final String leftImagePath;
 
   const LeftInfoSection({

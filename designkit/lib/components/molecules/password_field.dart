@@ -3,12 +3,26 @@ import '../atoms/text_field.dart' as dk;
 import '../atoms/text.dart' as dk;
 import '../../core/tokens/typography.dart';
 
+/// A specialized form molecule for obscured password input.
+/// 
+/// Combines a bold label with a [dk.TextField] configured with [isPassword] enabled.
 class PasswordField extends StatelessWidget {
+  /// The label text to display above the input field.
   final String label;
+
+  /// The placeholder text for the input field.
   final String hintText;
+
+  /// The horizontal width of the component.
   final double? width;
+
+  /// The positional offset of the entire component.
   final Offset offset;
+
+  /// The color of the label text.
   final Color labelColor;
+
+  /// The scale factor applied to the label font size.
   final double labelScale;
 
   const PasswordField({

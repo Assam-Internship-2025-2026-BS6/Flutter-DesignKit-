@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 
+/// A customizable dropdown molecule with an optional label and glass effect.
+/// 
+/// Features a styled container with shadow, custom icon, and flexible scaling.
 class Dropdown extends StatefulWidget {
+  /// The currently selected value.
   final String? value;
+
+  /// The list of items to display in the dropdown.
   final List<String> items;
+
+  /// Callback when the selected value changes.
   final ValueChanged<String?>? onChanged;
+
+  /// Optional label text to display above the dropdown.
   final String? label;
+
+  /// Placeholder text when no value is selected.
   final String hint;
+
+  /// The width of the dropdown container.
   final double width;
+
+  /// The color of the arrow icon.
   final Color activeColor;
+
+  /// The relative scale of the component.
   final double size;
+
+  /// The positional offset of the component.
   final Offset offset;
 
   const Dropdown({

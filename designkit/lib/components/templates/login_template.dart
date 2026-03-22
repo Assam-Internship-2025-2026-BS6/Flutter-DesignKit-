@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 
+/// A responsive template for login pages that splits the screen into two panels.
+/// 
+/// On desktop/tablet, it displays [leftSection] and [rightSection] side-by-side.
+/// On mobile (width < 800), it stacks them vertically inside a scroll view.
 class LoginTemplate extends StatelessWidget {
+  /// The widget content for the left (or top) panel.
   final Widget leftSection;
+
+  /// The widget content for the right (or bottom) panel.
   final Widget rightSection;
+
+  /// The base width of the template.
   final double width;
+
+  /// The base height of the template.
   final double height;
+
+  /// Whether the template should fill the entire screen dimensions.
   final bool isFullScreen;
 
   const LoginTemplate({

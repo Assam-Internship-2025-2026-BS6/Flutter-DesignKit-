@@ -1,14 +1,34 @@
 import 'package:flutter/material.dart';
 
+/// A customizable radio button atom with a label.
+///
+/// Supports smooth focus states and responsive scaling based on font size.
 class RadioButton extends StatefulWidget {
+  /// Whether this radio button is currently selected.
   final bool value;
+
+  /// Callback when the selection state changes.
   final ValueChanged<bool?>? onChanged;
+
+  /// The label text to display next to the radio button.
   final String label;
+
+  /// The color of the radio button when selected.
   final Color activeColor;
+
+  /// The color of the label text.
   final Color labelColor;
+
+  /// The font size of the label text.
   final double fontSize;
+
+  /// The font weight of the label text.
   final FontWeight fontWeight;
+
+  /// The relative scale of the component.
   final double size;
+
+  /// The positional offset of the component.
   final Offset offset;
 
   const RadioButton({

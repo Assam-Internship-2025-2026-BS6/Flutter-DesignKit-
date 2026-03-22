@@ -1,15 +1,38 @@
 import 'package:flutter/material.dart';
 
+/// A customizable toggle switch atom with an optional label.
+/// 
+/// Supports animated transitions, focused states, and scaling as part of 
+/// the design system.
 class ToggleSwitch extends StatefulWidget {
+  /// The current state of the switch.
   final bool value;
+
+  /// Callback when the switch state changes.
   final ValueChanged<bool>? onChanged;
+
+  /// Optional label text to display next to the switch.
   final String? label;
+
+  /// The background color when the switch is ON.
   final Color activeColor;
+
+  /// The text color of the label.
   final Color labelColor;
+
+  /// The relative scale of the whole component.
   final double size;
+
+  /// The font size of the label text.
   final double fontSize;
+
+  /// The typeface thickness of the label text.
   final FontWeight fontWeight;
+
+  /// Whether the switch is interactive.
   final bool disabled;
+
+  /// The positional offset of the component.
   final Offset offset;
 
   const ToggleSwitch({

@@ -3,34 +3,87 @@ import '../../core/tokens/colors.dart';
 import '../../core/tokens/spacing.dart';
 import 'landing_form.dart';
 
+/// A container organism typically shown on the right side of a login page.
+/// 
+/// Features a background image and centers the [LandingFormOrganism] 
+/// within it, managing responsiveness and overall layout.
 class RightLoginContainer extends StatelessWidget {
+  /// The optional width of the container.
   final double? width;
+
+  /// The optional height of the container.
   final double? height;
 
+  /// The main heading text for the form.
   final String title;
+
+  /// The supporting brand text for the form.
   final String subtitle;
+
+  /// The label for the customer ID input.
   final String customerIdLabel;
+
+  /// The placeholder for the customer ID input.
   final String customerIdHint;
+
+  /// The label for the password input.
   final String passwordLabel;
+
+  /// The text for the primary login button.
   final String buttonText;
+
+  /// The text for the QR login card.
   final String qrText;
+
+  /// The subtitle for the QR login card.
   final String qrSubtitle;
   
+  /// The size category for the title text.
   final String titleSize;
+
+  /// The color for the title text.
   final Color titleColor;
+
+  /// The size category for the subtitle text.
   final String subtitleSize;
+
+  /// The color for the subtitle text.
   final Color subtitleColor;
+
+  /// The size category for the customer ID text.
   final String customerIdSize;
+
+  /// The color for the customer ID text.
   final Color customerIdColor;
+
+  /// The size category for the password text.
   final String passwordSize;
+
+  /// The color for the password text.
   final Color passwordColor;
+
+  /// The size category for the button text.
   final String buttonSize;
+
+  /// The primary color for buttons and highlights.
   final Color buttonColor;
+
+  /// The size category for the QR text.
   final String qrTextSize;
+
+  /// The color for the QR text.
   final Color qrTextColor;
+
+  /// The size category for the QR subtitle text.
   final String qrSubtitleSize;
+
+  /// The color for the QR subtitle text.
   final Color qrSubtitleColor;
+
+  /// The size category for the checkbox text.
   final String checkboxSize;
+
+  /// The color for the checkbox text.
   final Color checkboxColor;
 
   const RightLoginContainer({

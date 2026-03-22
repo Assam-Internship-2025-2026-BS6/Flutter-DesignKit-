@@ -2,15 +2,36 @@ import 'package:flutter/material.dart' hide Text;
 import 'text.dart' as dk;
 import '../../core/tokens/colors.dart';
 
+/// A customizable button widget with built-in scale animation and hover effects.
+/// 
+/// This widget follows the design kit's aesthetic and provides a premium look
+/// and feel with its rounded corners and subtle shadows.
 class Button extends StatefulWidget {
+  /// The text to display on the button.
   final String text;
+
+  /// Callback function when the button is tapped.
   final VoidCallback? onTap;
+
+  /// The width of the button.
   final double width;
+
+  /// The height of the button.
   final double height;
+
+  /// The background color of the button.
   final Color color;
+
+  /// Whether the button is disabled.
   final bool disabled;
+
+  /// The opacity of the button.
   final double opacity;
+
+  /// The font weight of the button text.
   final FontWeight fontWeight;
+
+  /// The positional offset of the button.
   final Offset offset;
 
   const Button({

@@ -2,14 +2,33 @@ import 'package:flutter/material.dart' as m;
 import 'package:flutter/material.dart' show StatelessWidget, Widget, BuildContext, Color, FontWeight, TextAlign, TextStyle, Colors, Container, Offset, Transform;
 import '../../core/tokens/typography.dart';
 
+/// A design-system compliant text atom with built-in boundary management.
+/// 
+/// This widget handles positioning, wrapping, and constraint-based boundary 
+/// clamping to ensure text stays within the safe UI area.
 class Text extends StatelessWidget {
+  /// The string to display.
   final String text;
+
+  /// The size of the glyphs to use when painting the text.
   final double fontSize;
+
+  /// The color to use when painting the text.
   final Color color;
+
+  /// The typeface thickness to use when painting the text.
   final FontWeight fontWeight;
+
+  /// How the text should be aligned horizontally.
   final TextAlign textAlign;
+
+  /// An optional maximum number of lines for the text to span.
   final int? maxLines;
+
+  /// The amount of space to add between each letter.
   final double? letterSpacing;
+
+  /// The positional offset of the text block.
   final Offset offset;
 
   const Text({

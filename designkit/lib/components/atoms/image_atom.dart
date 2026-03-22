@@ -1,13 +1,30 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
+/// A centered image atom widget with optional shadow and offset support.
+/// 
+/// This widget provides a consistent way to display assets throughout 
+/// the design kit, including fallback behavior for broken images.
 class dkImage extends StatelessWidget {
+  /// The path to the image asset.
   final String imagePath;
+
+  /// The desired width of the image.
   final double? width;
+
+  /// The desired height of the image.
   final double? height;
+
+  /// Horizontal positional offset.
   final double offsetX;
+
+  /// Vertical positional offset.
   final double offsetY;
+
+  /// Whether to display a soft shadow beneath the image.
   final bool showShadow;
+
+  /// How the image should be inscribed into the box.
   final BoxFit fit;
 
   const dkImage({
