@@ -59,7 +59,7 @@ class NetBankingLoginPage extends StatelessWidget {
     this.passwordSize = 'Medium',
     this.passwordColor = const Color(0xFF1E1E4C),
     this.buttonSize = 'Medium',
-    this.buttonColor = AppColors.hdfcBlue,
+    this.buttonColor = const Color(0xFF004C8F),
     this.qrTextSize = 'Medium',
     this.qrTextColor = const Color(0xFF1E1E4C),
     this.qrSubtitleSize = 'Medium',

@@ -83,16 +83,21 @@ class LeftInfoSection extends StatelessWidget {
                     dk.Button(
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: dk.Text(text: "Loading detailed fraud prevention guide...", fontSize: 16),
-                            duration: Duration(seconds: 2),
+                          SnackBar(
+                            backgroundColor: Colors.black,
+                            content: dk.Text(
+                              text: "Loading detailed fraud prevention guide...",
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                            duration: const Duration(seconds: 2),
                           ),
                         );
                       },
                       text: "Know More",
                       width: isSmall ? 250 : 350,
                       height: 55,
-                      color: AppColors.hdfcBlue,
+                      color: const Color(0xFF004C8F),
                       opacity: 0.8,
                     ),
                     const SizedBox(height: 60),
