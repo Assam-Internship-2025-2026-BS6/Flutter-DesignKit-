@@ -17,7 +17,7 @@ class LoginButton extends StatefulWidget {
     required this.onTap,
     this.width = 483.0,
     this.height = 63.0,
-    this.color = const Color(0xFF1E1E4C), // Use HDFC default or preset color mapping
+    this.color = const Color(0xFF004C8F), // Updated to use HDFC brand color
     this.text = "Login",
     this.disabled = false,
     this.fontSize = 25.0,

@@ -33,7 +33,8 @@ class _TextButtonState extends State<TextButton> {
 
   @override
   Widget build(BuildContext context) {
-    final Color baseColor = widget.color ?? const Color(0xFF283097);
+    const defaultColor = Color(0xFF004C8F); // HDFC Blue
+    final Color baseColor = widget.color ?? defaultColor;
     final bool effectiveClickable = widget.isClickable;
 
     return LayoutBuilder(

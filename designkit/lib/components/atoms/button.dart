@@ -19,7 +19,7 @@ class Button extends StatefulWidget {
     this.onTap,
     this.width = 150.0,
     this.height = 50.0,
-    this.color = AppColors.hdfcBlue,
+    this.color = const Color(0xFF004C8F),
     this.disabled = false,
     this.opacity = 1.0,
     this.fontWeight = FontWeight.normal,

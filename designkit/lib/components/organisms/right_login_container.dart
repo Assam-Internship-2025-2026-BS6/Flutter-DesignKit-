@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/tokens/colors.dart';
 import '../../core/tokens/spacing.dart';
 import 'landing_form.dart';
 
@@ -53,7 +54,7 @@ class RightLoginContainer extends StatelessWidget {
     this.passwordSize = 'Medium',
     this.passwordColor = const Color(0xFF1E1E4C),
     this.buttonSize = 'Medium',
-    this.buttonColor = const Color(0xFF1E1E4C),
+    this.buttonColor = AppColors.hdfcBlue,
     this.qrTextSize = 'Medium',
     this.qrTextColor = const Color(0xFF1E1E4C),
     this.qrSubtitleSize = 'Medium',
