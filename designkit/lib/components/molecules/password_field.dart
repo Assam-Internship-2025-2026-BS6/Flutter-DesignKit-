@@ -37,6 +37,9 @@ class PasswordField extends StatelessWidget {
   /// The font weight of the input field text.
   final FontWeight inputWeight;
 
+  /// Callback when the text changes.
+  final ValueChanged<String>? onChanged;
+
   const PasswordField({
     super.key,
     required this.label,
@@ -49,6 +52,7 @@ class PasswordField extends StatelessWidget {
     this.inputColor = Colors.black87,
     this.inputFontSize = AppTypography.fontLarge,
     this.inputWeight = FontWeight.normal,
+    this.onChanged,
   });
 
   @override
@@ -73,6 +77,7 @@ class PasswordField extends StatelessWidget {
             maxLength: 16,
             fontSize: inputFontSize,
             fontWeight: inputWeight,
+            onChanged: onChanged,
           ),
         ],
       ),

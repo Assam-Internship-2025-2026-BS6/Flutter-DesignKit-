@@ -152,6 +152,17 @@ class LandingFormOrganism extends StatefulWidget {
 
 class _LandingFormOrganismState extends State<LandingFormOrganism> {
   bool _keepMeLoggedIn = false;
+  String _customerId = "";
+  String _password = "";
+
+  bool _isPasswordValid(String value) {
+    if (value.length < 8 || value.length > 16) return false;
+    if (!value.contains(RegExp(r'[A-Z]'))) return false;
+    if (!value.contains(RegExp(r'[a-z]'))) return false;
+    if (!value.contains(RegExp(r'[0-9]'))) return false;
+    if (!value.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) return false;
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -247,15 +258,31 @@ class _LandingFormOrganismState extends State<LandingFormOrganism> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             LabeledInputField(
-                              label: widget.customerIdLabel,
+                              label: '${widget.customerIdLabel} *',
                               hintText: widget.customerIdHint,
                               labelColor: widget.customerIdColor,
                               labelFontSize: AppTypography.fontMedium * cidScale,
+                              onChanged: (val) {
+                                setState(() {
+                                  _customerId = val;
+                                });
+                              },
                             ),
                             const SizedBox(height: 8),
                             dk.TextButton(
                               text: "Get Customer ID",
-                              onPressed: () => debugPrint("Get Customer ID Pressed"),
+                              onPressed: () {
+                                debugPrint("Get Customer ID Pressed");
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: dk.Text(
+                                      text: "Redirecting to the secure Customer ID retrieval portal.",
+                                      fontSize: 14.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              },
                               color: widget.customerIdColor,
                               fontSize: (isSmall ? AppTypography.fontMedium : AppTypography.fontLarge) * cidScale,
                             ),
@@ -266,15 +293,35 @@ class _LandingFormOrganismState extends State<LandingFormOrganism> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             PasswordField(
-                              label: widget.passwordLabel,
+                              label: '${widget.passwordLabel} *',
                               hintText: "Password",
                               labelColor: widget.passwordColor,
                               labelFontSize: AppTypography.fontMedium * pScale,
+                              onChanged: (val) {
+                                setState(() {
+                                  _password = val;
+                                });
+                              },
                             ),
                             const SizedBox(height: 8),
                             dk.TextButton(
                               text: "Set/Reset Password",
-                              onPressed: widget.onSetResetPassword ?? () => debugPrint("Set/Reset Password Pressed"),
+                              onPressed: () {
+                                if (widget.onSetResetPassword != null) {
+                                  widget.onSetResetPassword!();
+                                } else {
+                                  debugPrint("Set/Reset Password Pressed");
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: dk.Text(
+                                      text: "A secure password reset link has been dispatched to your registered email address.",
+                                      fontSize: 14.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              },
                               color: widget.passwordColor,
                               fontSize: (isSmall ? AppTypography.fontMedium : AppTypography.fontLarge) * pScale,
                             ),
@@ -311,7 +358,19 @@ class _LandingFormOrganismState extends State<LandingFormOrganism> {
                         /// LOGIN BUTTON
                         dk.LoginButton(
                           text: widget.buttonText,
-                          onTap: () => debugPrint("Login Pressed"),
+                          disabled: _customerId.trim().isEmpty || !_isPasswordValid(_password),
+                          onTap: () {
+                            debugPrint("Login Pressed");
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: dk.Text(
+                                  text: "Login Successful ✅",
+                                  fontSize: 14.0,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            );
+                          },
                           width: double.infinity,
                           height: (isVeryShort ? 46.0 : 55.0) * bScale,
                           color: widget.buttonColor,
@@ -335,7 +394,22 @@ class _LandingFormOrganismState extends State<LandingFormOrganism> {
                      ),
                     dk.TextButton(
                       text: "Register Now",
-                      onPressed: widget.onRegisterNow ?? () => debugPrint("Register Now Pressed"),
+                      onPressed: () {
+                        if (widget.onRegisterNow != null) {
+                          widget.onRegisterNow!();
+                        } else {
+                          debugPrint("Register Now Pressed");
+                        }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: dk.Text(
+                              text: "Redirecting to the official NetBanking registration portal.",
+                              fontSize: 14.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      },
                       color: widget.buttonColor,
                       fontSize: (isSmall ? AppTypography.fontSmall : AppTypography.fontMedium) * bScale,
                     ),

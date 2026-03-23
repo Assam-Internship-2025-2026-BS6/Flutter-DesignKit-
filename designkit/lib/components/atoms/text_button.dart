@@ -99,23 +99,26 @@ class _TextButtonState extends State<TextButton> {
                   onInvoke: (_) => widget.onPressed(),
                 ),
               },
-              child: AnimatedDefaultTextStyle(
-                duration: const Duration(milliseconds: 150),
-                style: TextStyle(
-                  fontWeight: widget.fontWeight,
-                  fontSize: widget.fontSize,
-                  height: 1.0,
-                  letterSpacing: 0,
-                  color: (_isHovering || _isFocused)
-                      ? baseColor.withValues(alpha: 0.8)
-                      : baseColor,
-                  decoration: (_isHovering || _isFocused) && widget.enableHover
-                      ? TextDecoration.underline
-                      : TextDecoration.none,
-                  decorationThickness: 2,
-                  decorationColor: baseColor.withValues(alpha: 0.5),
+              child: GestureDetector(
+                onTap: effectiveClickable ? widget.onPressed : null,
+                child: AnimatedDefaultTextStyle(
+                  duration: const Duration(milliseconds: 150),
+                  style: TextStyle(
+                    fontWeight: widget.fontWeight,
+                    fontSize: widget.fontSize,
+                    height: 1.0,
+                    letterSpacing: 0,
+                    color: (_isHovering || _isFocused)
+                        ? baseColor.withValues(alpha: 0.8)
+                        : baseColor,
+                    decoration: (_isHovering || _isFocused) && widget.enableHover
+                        ? TextDecoration.underline
+                        : TextDecoration.none,
+                    decorationThickness: 2,
+                    decorationColor: baseColor.withValues(alpha: 0.5),
+                  ),
+                  child: m.Text(widget.text), // Text bounded naturally
                 ),
-                child: m.Text(widget.text), // Text bounded naturally
               ),
             ),
           ),

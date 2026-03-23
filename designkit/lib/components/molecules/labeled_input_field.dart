@@ -37,6 +37,9 @@ class LabeledInputField extends StatelessWidget {
   /// The font weight of the input field text.
   final FontWeight inputWeight;
 
+  /// Callback when the text changes.
+  final ValueChanged<String>? onChanged;
+
   const LabeledInputField({
     super.key,
     required this.label,
@@ -49,6 +52,7 @@ class LabeledInputField extends StatelessWidget {
     this.inputColor = Colors.black87,
     this.inputFontSize = AppTypography.fontLarge,
     this.inputWeight = FontWeight.normal,
+    this.onChanged,
   });
 
   @override
@@ -71,6 +75,7 @@ class LabeledInputField extends StatelessWidget {
             width: width != null && width! > 850 ? 850 : width,
             fontSize: inputFontSize,
             fontWeight: inputWeight,
+            onChanged: onChanged,
             // Note: dk.TextField currently handles its own color internally based on HDFC theme, 
             // but we can pass color if the atom supports it.
             // For now, we prioritize the typography requested by the user.

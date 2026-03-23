@@ -73,7 +73,7 @@ class GlassCard extends StatelessWidget {
     this.borderOpacity = 0.3,
     this.padding = const EdgeInsets.all(AppSpacing.large),
     this.showShadow = true,
-    this.tintColor = Colors.white,
+    this.tintColor = const Color(0xFF3B82F6),
     this.onTap,
   });
 

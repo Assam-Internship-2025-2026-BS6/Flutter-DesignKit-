@@ -33,6 +33,9 @@ class TextField extends StatefulWidget {
   /// The desired height of the field.
   final double? height;
 
+  /// Callback when text changes.
+  final ValueChanged<String>? onChanged;
+
   /// Whether to display validation error text.
   final bool showErrorText;
 
@@ -66,6 +69,7 @@ class TextField extends StatefulWidget {
     this.inputFormatters,
     this.width,
     this.height = 60.0,
+    this.onChanged,
     this.showErrorText = true,
     this.textColor = AppColors.black,
     this.fontWeight = FontWeight.normal,
@@ -117,6 +121,9 @@ class _TextFieldState extends State<TextField> {
   void _validate(String value) {
     if (value.trim().isEmpty) {
       setState(() => _errorText = null);
+      if (widget.onChanged != null) {
+        widget.onChanged!(value);
+      }
       return;
     }
     String? error;
@@ -133,6 +140,10 @@ class _TextFieldState extends State<TextField> {
     setState(() {
       _errorText = error;
     });
+
+    if (widget.onChanged != null) {
+      widget.onChanged!(value);
+    }
   }
 
   bool get hasError => _errorText != null;
