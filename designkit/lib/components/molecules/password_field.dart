@@ -5,7 +5,7 @@ import '../../core/tokens/typography.dart';
 
 /// A specialized form molecule for obscured password input.
 /// 
-/// Combines a bold label with a [dk.TextField] configured with [isPassword] enabled.
+/// Supports symmetrical customization for both the label and input sections.
 class PasswordField extends StatelessWidget {
   /// The label text to display above the input field.
   final String label;
@@ -22,8 +22,20 @@ class PasswordField extends StatelessWidget {
   /// The color of the label text.
   final Color labelColor;
 
-  /// The scale factor applied to the label font size.
-  final double labelScale;
+  /// The font size of the label text.
+  final double labelFontSize;
+
+  /// The font weight of the label text.
+  final FontWeight labelWeight;
+
+  /// The color of the input field text.
+  final Color inputColor;
+
+  /// The font size of the input field text.
+  final double inputFontSize;
+
+  /// The font weight of the input field text.
+  final FontWeight inputWeight;
 
   const PasswordField({
     super.key,
@@ -32,7 +44,11 @@ class PasswordField extends StatelessWidget {
     this.width,
     this.offset = Offset.zero,
     this.labelColor = Colors.black,
-    this.labelScale = 1.0,
+    this.labelFontSize = AppTypography.fontMedium,
+    this.labelWeight = FontWeight.normal,
+    this.inputColor = Colors.black87,
+    this.inputFontSize = AppTypography.fontLarge,
+    this.inputWeight = FontWeight.normal,
   });
 
   @override
@@ -40,24 +56,26 @@ class PasswordField extends StatelessWidget {
     return Transform.translate(
       offset: offset,
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        dk.Text(
-          text: label,
-          color: labelColor,
-          fontSize: AppTypography.fontMedium * labelScale,
-          fontWeight: FontWeight.bold,
-        ),
-        const SizedBox(height: 6),
-        dk.TextField(
-          hintText: hintText,
-          isPassword: true,
-          width: width != null && width! > 850 ? 850 : width,
-          maxLength: 16,
-        ),
-      ],
-    ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          dk.Text(
+            text: label,
+            color: labelColor,
+            fontSize: labelFontSize,
+            fontWeight: labelWeight,
+          ),
+          const SizedBox(height: 6),
+          dk.TextField(
+            hintText: hintText,
+            isPassword: true,
+            width: width != null && width! > 850 ? 850 : width,
+            maxLength: 16,
+            fontSize: inputFontSize,
+            fontWeight: inputWeight,
+          ),
+        ],
+      ),
     );
   }
 }

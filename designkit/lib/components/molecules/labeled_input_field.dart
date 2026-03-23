@@ -3,9 +3,9 @@ import '../atoms/text_field.dart' as dk;
 import '../atoms/text.dart' as dk;
 import '../../core/tokens/typography.dart';
 
-/// A molecule that combines a bold label with a standardized text input field.
+/// A molecule that combines a label with a standardized text input field.
 /// 
-/// Ensures consistent spacing and layout for form fields throughout the app.
+/// Supports symmetrical customization for both the label and input sections.
 class LabeledInputField extends StatelessWidget {
   /// The label text to display above the input field.
   final String label;
@@ -22,8 +22,20 @@ class LabeledInputField extends StatelessWidget {
   /// The color of the label text.
   final Color labelColor;
 
-  /// The scale factor applied to the label font size.
-  final double labelScale;
+  /// The font size of the label text.
+  final double labelFontSize;
+
+  /// The font weight of the label text.
+  final FontWeight labelWeight;
+
+  /// The color of the input field text.
+  final Color inputColor;
+
+  /// The font size of the input field text.
+  final double inputFontSize;
+
+  /// The font weight of the input field text.
+  final FontWeight inputWeight;
 
   const LabeledInputField({
     super.key,
@@ -32,7 +44,11 @@ class LabeledInputField extends StatelessWidget {
     this.width,
     this.offset = Offset.zero,
     this.labelColor = Colors.black,
-    this.labelScale = 1.0,
+    this.labelFontSize = AppTypography.fontMedium,
+    this.labelWeight = FontWeight.normal,
+    this.inputColor = Colors.black87,
+    this.inputFontSize = AppTypography.fontLarge,
+    this.inputWeight = FontWeight.normal,
   });
 
   @override
@@ -40,22 +56,27 @@ class LabeledInputField extends StatelessWidget {
     return Transform.translate(
       offset: offset,
       child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        dk.Text(
-          text: label,
-          color: labelColor,
-          fontSize: AppTypography.fontMedium * labelScale,
-          fontWeight: FontWeight.bold,
-        ),
-        const SizedBox(height: 6),
-        dk.TextField(
-          hintText: hintText,
-          width: width != null && width! > 850 ? 850 : width,
-        ),
-      ],
-    ),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          dk.Text(
+            text: label,
+            color: labelColor,
+            fontSize: labelFontSize,
+            fontWeight: labelWeight,
+          ),
+          const SizedBox(height: 6),
+          dk.TextField(
+            hintText: hintText,
+            width: width != null && width! > 850 ? 850 : width,
+            fontSize: inputFontSize,
+            fontWeight: inputWeight,
+            // Note: dk.TextField currently handles its own color internally based on HDFC theme, 
+            // but we can pass color if the atom supports it.
+            // For now, we prioritize the typography requested by the user.
+          ),
+        ],
+      ),
     );
   }
 }

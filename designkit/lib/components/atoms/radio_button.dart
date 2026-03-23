@@ -28,6 +28,9 @@ class RadioButton extends StatefulWidget {
   /// The relative scale of the component.
   final double size;
 
+  /// Whether the radio button is interactive.
+  final bool disabled;
+
   /// The positional offset of the component.
   final Offset offset;
 
@@ -41,6 +44,7 @@ class RadioButton extends StatefulWidget {
     this.fontSize = 28.0,
     this.fontWeight = FontWeight.normal,
     this.size = 1.0,
+    this.disabled = false,
     this.offset = Offset.zero,
   });
 
@@ -63,7 +67,7 @@ class _RadioButtonState extends State<RadioButton> {
     final double scaleFactor = widget.fontSize / 28.0;
     final double containerSize = 24.0 * scaleFactor;
     final double innerSize = 12.0 * scaleFactor;
-    
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final double canvasWidth =
@@ -90,7 +94,10 @@ class _RadioButtonState extends State<RadioButton> {
               maxHeight: dynMaxHeight,
             ),
             child: FocusableActionDetector(
-              mouseCursor: SystemMouseCursors.click,
+              mouseCursor: widget.disabled
+                  ? SystemMouseCursors.basic
+                  : SystemMouseCursors.click,
+              enabled: !widget.disabled,
               onShowFocusHighlight: (value) {
                 setState(() => _isFocused = value);
               },
@@ -100,59 +107,67 @@ class _RadioButtonState extends State<RadioButton> {
                 ),
               },
               child: GestureDetector(
-                onTap: _handleTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-                  decoration: BoxDecoration(
-                    color: _isFocused
-                        ? widget.activeColor.withValues(alpha: 0.1)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
-                    border: _isFocused
-                        ? Border.all(color: widget.activeColor.withValues(alpha: 0.5), width: 1)
-                        : null,
-                  ),
-                  child: Transform.scale(
-                    scale: widget.size,
-                    alignment: Alignment.centerLeft,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          width: containerSize,
-                          height: containerSize,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: isSelected ? widget.activeColor : Colors.grey,
-                              width: 2 * scaleFactor,
+                onTap: widget.disabled ? null : _handleTap,
+                child: Opacity(
+                  opacity: widget.disabled ? 0.5 : 1.0,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 8.0),
+                    decoration: BoxDecoration(
+                      color: _isFocused
+                          ? widget.activeColor.withValues(alpha: 0.1)
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(10),
+                      border: _isFocused
+                          ? Border.all(
+                              color: widget.activeColor.withValues(alpha: 0.5),
+                              width: 1)
+                          : null,
+                    ),
+                    child: Transform.scale(
+                      scale: widget.size,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: containerSize,
+                            height: containerSize,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isSelected
+                                    ? widget.activeColor
+                                    : Colors.grey,
+                                width: 2 * scaleFactor,
+                              ),
+                            ),
+                            child: Center(
+                              child: isSelected
+                                  ? Container(
+                                      width: innerSize,
+                                      height: innerSize,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: widget.activeColor,
+                                      ),
+                                    )
+                                  : null,
                             ),
                           ),
-                          child: Center(
-                            child: isSelected
-                                ? Container(
-                                    width: innerSize,
-                                    height: innerSize,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: widget.activeColor,
-                                    ),
-                                  )
-                                : null,
-                          ),
-                        ),
-                        SizedBox(width: 12 * scaleFactor),
-                        Flexible(
-                          child: Text(
-                            widget.label,
-                            style: TextStyle(
-                              fontSize: widget.fontSize,
-                              fontWeight: widget.fontWeight,
-                              color: widget.labelColor,
+                          SizedBox(width: 12 * scaleFactor),
+                          Flexible(
+                            child: Text(
+                              widget.label,
+                              style: TextStyle(
+                                fontSize: widget.fontSize,
+                                fontWeight: widget.fontWeight,
+                                color: widget.labelColor,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

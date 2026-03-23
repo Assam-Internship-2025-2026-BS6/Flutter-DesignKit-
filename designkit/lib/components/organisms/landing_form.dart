@@ -250,7 +250,7 @@ class _LandingFormOrganismState extends State<LandingFormOrganism> {
                               label: widget.customerIdLabel,
                               hintText: widget.customerIdHint,
                               labelColor: widget.customerIdColor,
-                              labelScale: cidScale,
+                              labelFontSize: AppTypography.fontMedium * cidScale,
                             ),
                             const SizedBox(height: 8),
                             dk.TextButton(
@@ -269,7 +269,7 @@ class _LandingFormOrganismState extends State<LandingFormOrganism> {
                               label: widget.passwordLabel,
                               hintText: "Password",
                               labelColor: widget.passwordColor,
-                              labelScale: pScale,
+                              labelFontSize: AppTypography.fontMedium * pScale,
                             ),
                             const SizedBox(height: 8),
                             dk.TextButton(

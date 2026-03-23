@@ -51,6 +51,9 @@ class TextField extends StatefulWidget {
   /// The positional offset of the component.
   final Offset offset;
 
+  final TextInputType keyboardType;
+  final bool enableInteractiveSelection;
+
   /// Custom internal padding for the text input.
   final EdgeInsetsGeometry? contentPadding;
 
@@ -69,6 +72,8 @@ class TextField extends StatefulWidget {
     this.fontSize = AppTypography.fontLarge,
     this.enabled = true,
     this.offset = Offset.zero,
+    this.keyboardType = TextInputType.text,
+    this.enableInteractiveSelection = true,
     this.contentPadding,
   });
 
@@ -172,7 +177,7 @@ class _TextFieldState extends State<TextField> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  MouseRegion(
+                   MouseRegion(
                     onEnter: (_) => setState(() => _isHovering = true),
                     onExit: (_) => setState(() => _isHovering = false),
                     child: AnimatedContainer(
@@ -201,10 +206,11 @@ class _TextFieldState extends State<TextField> {
                           enabled: widget.enabled,
                           controller: _controller,
                           obscureText: widget.isPassword ? _obscureText : false,
-                          maxLines: 1,
+                          maxLines: widget.isPassword ? 1 : null,
                           minLines: 1,
                           expands: false,
-                          keyboardType: TextInputType.text,
+                          keyboardType: widget.keyboardType,
+                          enableInteractiveSelection: widget.enableInteractiveSelection,
                           maxLength: widget.maxLength,
                           inputFormatters: widget.inputFormatters,
                           onChanged: _validate,
