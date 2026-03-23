@@ -17,8 +17,7 @@ dependencies:
   designkit:
     git:
       url: https://github.com/<your-repo>/Flutter-DesignKit.git
-      # optionally add:
-      # ref: main
+      ref: develop
 
 dev_dependencies:
   flutter_test:
