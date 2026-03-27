@@ -149,37 +149,51 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
                   onTapDown: _handleTapDown,
                   onTapUp: _handleTapUp,
                   onTapCancel: _handleTapCancel,
-                  child: ScaleTransition(
-                    scale: _scaleAnimation,
-                    child: Container(
-                      width: widget.width > dynMaxWidth ? dynMaxWidth : widget.width,
-                      height: widget.height > dynMaxHeight ? dynMaxHeight : widget.height,
-                      decoration: BoxDecoration(
-                        color: widget.color,
-                        borderRadius: BorderRadius.circular(widget.height / 2),
-                        border: _isFocused
-                            ? Border.all(color: Colors.white.withAlpha(204), width: 2)
-                            : null,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(20),
-                            offset: const Offset(0, 4),
-                            blurRadius: 4,
+                  child: AnimatedScale(
+                    scale: _isHovering ? 1.02 : 1.0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOutCubic,
+                    child: ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: Container(
+                        width: widget.width > dynMaxWidth ? dynMaxWidth : widget.width,
+                        height: widget.height > dynMaxHeight ? dynMaxHeight : widget.height,
+                        decoration: BoxDecoration(
+                          color: widget.color,
+                          borderRadius: BorderRadius.circular(widget.height / 2),
+                          border: Border.all(
+                            color: _isFocused || _isHovering
+                                ? Colors.white.withValues(alpha: 0.9)
+                                : Colors.transparent,
+                            width: (_isFocused || _isHovering) ? 2.5 : 0.0,
                           ),
-                          if (_isFocused || _isHovering)
+                          boxShadow: [
                             BoxShadow(
-                              color: widget.color.withAlpha(102),
-                              blurRadius: 12,
-                              spreadRadius: 2,
+                              color: Colors.black.withAlpha(20),
+                              offset: const Offset(0, 4),
+                              blurRadius: 4,
                             ),
-                        ],
-                      ),
-                      alignment: Alignment.center,
-                      child: dk.Text(
-                        text: widget.text,
-                        color: AppColors.white,
-                        fontSize: widget.height * 0.4, // Responsive font size based on height
-                        fontWeight: widget.fontWeight,
+                            if (_isFocused || _isHovering)
+                              BoxShadow(
+                                color: const Color(0xFF004C8F).withValues(alpha: 0.3), // HDFC Blue Halo
+                                blurRadius: _isHovering ? 20 : 12,
+                                spreadRadius: _isHovering ? 6 : 2,
+                              ),
+                            if (_isFocused || _isHovering)
+                              BoxShadow(
+                                color: widget.color.withAlpha(150),
+                                blurRadius: _isHovering ? 15 : 10,
+                                spreadRadius: _isHovering ? 2 : 1,
+                              ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        child: dk.Text(
+                          text: widget.text,
+                          color: AppColors.white,
+                          fontSize: widget.height * 0.4, // Responsive font size based on height
+                          fontWeight: widget.fontWeight,
+                        ),
                       ),
                     ),
                   ),

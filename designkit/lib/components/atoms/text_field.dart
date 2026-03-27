@@ -201,15 +201,25 @@ class _TextFieldState extends State<TextField> {
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: _isHovering
-                            ? const Color(0x26FFFFFF).withValues(alpha: 0.1)
+                            ? const Color(0x3DFFFFFF).withValues(alpha: 0.15)
                             : const Color(0x26FFFFFF),
                         borderRadius: BorderRadius.circular(AppRadius.circular),
                         border: Border.all(
                           color: (hasError && widget.showErrorText)
                               ? Colors.red
-                              : Colors.black.withValues(alpha: 0.2),
-                          width: 2.0,
+                              : _isHovering 
+                                  ? AppColors.hdfcBlue.withValues(alpha: 0.8)
+                                  : Colors.black.withValues(alpha: 0.2),
+                          width: _isHovering ? 2.5 : 2.0,
                         ),
+                        boxShadow: [
+                          if (_isHovering)
+                            BoxShadow(
+                              color: AppColors.hdfcBlue.withValues(alpha: 0.25),
+                              blurRadius: 15,
+                              spreadRadius: 4,
+                            ),
+                        ],
                       ),
                       child: Opacity(
                         opacity: widget.enabled ? 1.0 : 0.5,

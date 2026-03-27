@@ -6,7 +6,7 @@ import '../../core/tokens/typography.dart';
 /// 
 /// This widget handles positioning, wrapping, and constraint-based boundary 
 /// clamping to ensure text stays within the safe UI area.
-class Text extends StatelessWidget {
+class Text extends StatefulWidget {
   /// The string to display.
   final String text;
 
@@ -44,6 +44,13 @@ class Text extends StatelessWidget {
   });
 
   @override
+  State<Text> createState() => _TextState();
+}
+
+class _TextState extends State<Text> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
     return m.LayoutBuilder(
       builder: (context, constraints) {
@@ -54,42 +61,67 @@ class Text extends StatelessWidget {
             constraints.maxHeight.isFinite ? constraints.maxHeight : 1024.0;
 
         // 1 & 3: Reflow-aware wrapping & dynamic max-width/max-height
-        // `availableWidth = canvasWidth - abs(xOffset)` shrinks wrap width automatically
         final double dynMaxWidth =
-            (canvasWidth - offset.dx.abs()).clamp(0.0, double.infinity);
+            (canvasWidth - widget.offset.dx.abs()).clamp(0.0, double.infinity);
         final double dynMaxHeight =
-            (canvasHeight - offset.dy.abs()).clamp(0.0, double.infinity);
+            (canvasHeight - widget.offset.dy.abs()).clamp(0.0, double.infinity);
 
         // 2: Boundary clamping
-        // Text block must be fully contained within the preview screen.
-        // We find the safe offset bounds. Since the parent centers the widget:
-        // It starts at the center. Max distance it can shift without overflowing is half of the remaining canvas space.
         final double maxSafeDx = (canvasWidth - dynMaxWidth) / 2.0;
         final double maxSafeDy = (canvasHeight - dynMaxHeight) / 2.0;
 
         // Apply bounding constraints so negative/positive Y or X offsets are clamped safely
-        final double clampedX = offset.dx.clamp(-maxSafeDx, maxSafeDx);
-        final double clampedY = offset.dy.clamp(-maxSafeDy, maxSafeDy);
+        final double clampedX = widget.offset.dx.clamp(-maxSafeDx, maxSafeDx);
+        final double clampedY = widget.offset.dy.clamp(-maxSafeDy, maxSafeDy);
 
         return Transform.translate(
           offset: Offset(clampedX, clampedY),
-          child: Container(
-            constraints: m.BoxConstraints(
-              maxWidth: dynMaxWidth,
-              maxHeight: dynMaxHeight,
-            ),
-            // 4: No overflow, no clipping - natural wrapping
-            child: m.Text(
-              text,
-              maxLines: maxLines,
-              textAlign: textAlign,
-              overflow: null, // removing clip/ellipsis so it stays fully visible
-              style: TextStyle(
-                fontSize: fontSize,
-                color: color,
-                fontWeight: fontWeight,
-                fontFamily: AppTypography.fontFamily,
-                letterSpacing: letterSpacing,
+          child: m.MouseRegion(
+            onEnter: (_) => setState(() => _isHovering = true),
+            onExit: (_) => setState(() => _isHovering = false),
+            cursor: SystemMouseCursors.click,
+            child: m.AnimatedScale(
+              scale: _isHovering ? 1.02 : 1.0,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeOutCubic,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: EdgeInsets.symmetric(
+                  horizontal: _isHovering ? 8.0 : 0.0,
+                  vertical: _isHovering ? 2.0 : 4.0,
+                ),
+                decoration: BoxDecoration(
+                  color: _isHovering
+                      ? widget.color.withValues(alpha: 0.1)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    if (_isHovering)
+                      BoxShadow(
+                        color: const Color(0xFF004C8F).withValues(alpha: 0.2), // HDFC Blue Halo
+                        blurRadius: 8,
+                        spreadRadius: 2,
+                      ),
+                  ],
+                ),
+                constraints: m.BoxConstraints(
+                  maxWidth: dynMaxWidth,
+                  maxHeight: dynMaxHeight,
+                ),
+                // 4: No overflow, no clipping - natural wrapping
+                child: m.Text(
+                  widget.text,
+                  maxLines: widget.maxLines,
+                  textAlign: widget.textAlign,
+                  overflow: null, // removing clip/ellipsis so it stays fully visible
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                    color: widget.color,
+                    fontWeight: widget.fontWeight,
+                    fontFamily: AppTypography.fontFamily,
+                    letterSpacing: widget.letterSpacing,
+                  ),
+                ),
               ),
             ),
           ),

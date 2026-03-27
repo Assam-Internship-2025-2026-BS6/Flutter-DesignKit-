@@ -62,6 +62,7 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
   late Animation<double> _scaleAnimation;
   late bool _isSelected;
   bool _isFocused = false;
+  bool _isHovering = false;
 
   @override
   void initState() {
@@ -158,6 +159,9 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
               onShowFocusHighlight: (value) {
                 setState(() => _isFocused = value);
               },
+              onShowHoverHighlight: (value) {
+                setState(() => _isHovering = value);
+              },
               actions: {
                 ActivateIntent: CallbackAction<ActivateIntent>(
                   onInvoke: (_) => _handleTap(),
@@ -165,17 +169,31 @@ class _CheckboxState extends State<Checkbox> with SingleTickerProviderStateMixin
               },
               child: GestureDetector(
                 onTap: _handleTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: _isFocused
-                        ? activeColor.withAlpha(26)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(10),
-                    border: _isFocused
-                        ? Border.all(color: activeColor.withAlpha(128), width: 1)
-                        : null,
-                  ),
+                child: AnimatedScale(
+                  scale: _isHovering ? 1.02 : 1.0,
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeOutCubic,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              color: _isFocused || _isHovering
+                                  ? activeColor.withAlpha(51) // Increased from 26
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),
+                              border: _isFocused || _isHovering
+                                  ? Border.all(
+                                      color: activeColor.withAlpha(_isHovering ? 200 : 128), 
+                                      width: _isHovering ? 2.0 : 1.0,
+                                    )
+                                  : null,
+                              boxShadow: [
+                                if (_isHovering)
+                                  BoxShadow(
+                                    color: activeColor.withValues(alpha: 0.2),
+                                    blurRadius: 10,
+                                    spreadRadius: 3,
+                                  ),
+                              ],
+                            ),
                   child: Transform.scale(
                     scale: widget.size,
                     alignment: Alignment.centerLeft, // Alignment centerLeft for natural expansion

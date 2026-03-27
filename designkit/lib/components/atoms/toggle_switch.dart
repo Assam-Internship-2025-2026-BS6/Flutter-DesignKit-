@@ -55,6 +55,8 @@ class ToggleSwitch extends StatefulWidget {
 
 class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderStateMixin {
   late bool _internalValue;
+  bool _isFocused = false;
+  bool _isHovering = false;
 
   @override
   void initState() {
@@ -69,8 +71,6 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
       _internalValue = widget.value;
     }
   }
-
-  bool _isFocused = false;
 
   void _handleTap() {
     if (widget.onChanged != null) {
@@ -118,6 +118,9 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
                 onShowFocusHighlight: (value) {
                   setState(() => _isFocused = value);
                 },
+                onShowHoverHighlight: (value) {
+                  setState(() => _isHovering = value);
+                },
                 actions: {
                   ActivateIntent: CallbackAction<ActivateIntent>(
                     onInvoke: (_) => widget.disabled ? null : _handleTap(),
@@ -127,17 +130,31 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
                   onTap: widget.disabled ? null : _handleTap,
                   child: Opacity(
                     opacity: widget.disabled ? 0.5 : 1.0,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: _isFocused
-                            ? widget.activeColor.withValues(alpha: 0.1)
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(20),
-                        border: _isFocused
-                            ? Border.all(color: widget.activeColor.withValues(alpha: 0.5), width: 1)
-                            : null,
-                      ),
+                    child: AnimatedScale(
+                      scale: _isHovering ? 1.02 : 1.0,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOutCubic,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: _isFocused || _isHovering
+                              ? widget.activeColor.withValues(alpha: 0.15)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(20),
+                          border: _isFocused || _isHovering
+                              ? Border.all(
+                                  color: widget.activeColor.withValues(alpha: _isHovering ? 0.7 : 0.5), 
+                                  width: _isHovering ? 2.0 : 1.0)
+                              : null,
+                          boxShadow: [
+                            if (_isHovering)
+                              BoxShadow(
+                                color: widget.activeColor.withValues(alpha: 0.2),
+                                blurRadius: 10,
+                                spreadRadius: 3,
+                              ),
+                          ],
+                        ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

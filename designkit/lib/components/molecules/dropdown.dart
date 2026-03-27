@@ -60,6 +60,7 @@ class Dropdown extends StatefulWidget {
 class _DropdownState extends State<Dropdown> {
   String? _selectedValue;
   bool _isOpen = false;
+  bool _isHovering = false;
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
 
@@ -214,59 +215,66 @@ class _DropdownState extends State<Dropdown> {
             CompositedTransformTarget(
               link: _layerLink,
               child: MouseRegion(
+                onEnter: (_) => setState(() => _isHovering = true),
+                onExit: (_) => setState(() => _isHovering = false),
                 cursor: widget.enabled ? SystemMouseCursors.click : SystemMouseCursors.forbidden,
                 child: GestureDetector(
                   onTap: widget.enabled ? _toggleDropdown : null,
                   child: Opacity(
                     opacity: widget.enabled ? 1.0 : 0.6,
-                    child: Container(
-                      width: widget.width,
-                      height: 55,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: widget.enabled ? Colors.white : Colors.grey[50],
-                        borderRadius: BorderRadius.circular(AppRadius.small),
-                        border: Border.all(
-                          color: _isOpen 
-                              ? widget.activeColor 
-                              : widget.enabled 
-                                  ? Colors.black.withOpacity(0.15)
-                                  : Colors.black.withOpacity(0.1),
-                          width: _isOpen ? 2.0 : 1.5,
-                        ),
-                        boxShadow: [
-                          if (widget.enabled)
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.04),
-                              blurRadius: 8,
-                              offset: const Offset(0, 4),
-                            ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              _selectedValue ?? widget.hint,
-                              style: TextStyle(
-                                color: _selectedValue == null ? Colors.black38 : Colors.black87,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: AppTypography.fontFamily,
+                    child: AnimatedScale(
+                      scale: _isHovering && widget.enabled ? 1.02 : 1.0,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOutCubic,
+                      child: Container(
+                        width: widget.width,
+                        height: 55,
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: widget.enabled ? Colors.white : Colors.grey[50],
+                          borderRadius: BorderRadius.circular(AppRadius.small),
+                          border: Border.all(
+                            color: _isOpen || (_isHovering && widget.enabled)
+                                ? widget.activeColor 
+                                : widget.enabled 
+                                    ? Colors.black.withOpacity(0.15)
+                                    : Colors.black.withOpacity(0.1),
+                            width: _isOpen || (_isHovering && widget.enabled) ? 2.0 : 1.5,
+                          ),
+                          boxShadow: [
+                            if (widget.enabled)
+                              BoxShadow(
+                                color: Colors.black.withOpacity(_isHovering ? 0.08 : 0.04),
+                                blurRadius: _isHovering ? 12 : 8,
+                                offset: const Offset(0, 4),
                               ),
-                              overflow: TextOverflow.ellipsis,
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                _selectedValue ?? widget.hint,
+                                style: TextStyle(
+                                  color: _selectedValue == null ? Colors.black38 : Colors.black87,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: AppTypography.fontFamily,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
-                          ),
-                          AnimatedRotation(
-                            turns: _isOpen ? 0.5 : 0.0,
-                            duration: const Duration(milliseconds: 200),
-                            child: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: widget.enabled ? widget.activeColor : Colors.black26,
-                              size: 24,
+                            AnimatedRotation(
+                              turns: _isOpen ? 0.5 : 0.0,
+                              duration: const Duration(milliseconds: 200),
+                              child: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: widget.enabled ? widget.activeColor : Colors.black26,
+                                size: 24,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

@@ -6,7 +6,7 @@ import '../../core/tokens/typography.dart';
 /// A specialized form molecule for obscured password input.
 /// 
 /// Supports symmetrical customization for both the label and input sections.
-class PasswordField extends StatelessWidget {
+class PasswordField extends StatefulWidget {
   /// The label text to display above the input field.
   final String label;
 
@@ -56,30 +56,46 @@ class PasswordField extends StatelessWidget {
   });
 
   @override
+  State<PasswordField> createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: offset,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          dk.Text(
-            text: label,
-            color: labelColor,
-            fontSize: labelFontSize,
-            fontWeight: labelWeight,
+      offset: widget.offset,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit: (_) => setState(() => _isHovering = false),
+        child: AnimatedScale(
+          scale: _isHovering ? 1.01 : 1.0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              dk.Text(
+                text: widget.label,
+                color: widget.labelColor,
+                fontSize: widget.labelFontSize,
+                fontWeight: widget.labelWeight,
+              ),
+              const SizedBox(height: 6),
+              dk.TextField(
+                hintText: widget.hintText,
+                isPassword: true,
+                width: widget.width != null && widget.width! > 850 ? 850 : widget.width,
+                maxLength: 16,
+                fontSize: widget.inputFontSize,
+                fontWeight: widget.inputWeight,
+                onChanged: widget.onChanged,
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
-          dk.TextField(
-            hintText: hintText,
-            isPassword: true,
-            width: width != null && width! > 850 ? 850 : width,
-            maxLength: 16,
-            fontSize: inputFontSize,
-            fontWeight: inputWeight,
-            onChanged: onChanged,
-          ),
-        ],
+        ),
       ),
     );
   }

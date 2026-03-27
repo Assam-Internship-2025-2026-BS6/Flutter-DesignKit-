@@ -6,7 +6,7 @@ import '../../core/tokens/typography.dart';
 /// A molecule that combines a label with a standardized text input field.
 /// 
 /// Supports symmetrical customization for both the label and input sections.
-class LabeledInputField extends StatelessWidget {
+class LabeledInputField extends StatefulWidget {
   /// The label text to display above the input field.
   final String label;
 
@@ -56,31 +56,44 @@ class LabeledInputField extends StatelessWidget {
   });
 
   @override
+  State<LabeledInputField> createState() => _LabeledInputFieldState();
+}
+
+class _LabeledInputFieldState extends State<LabeledInputField> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: offset,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          dk.Text(
-            text: label,
-            color: labelColor,
-            fontSize: labelFontSize,
-            fontWeight: labelWeight,
+      offset: widget.offset,
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit: (_) => setState(() => _isHovering = false),
+        child: AnimatedScale(
+          scale: _isHovering ? 1.01 : 1.0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              dk.Text(
+                text: widget.label,
+                color: widget.labelColor,
+                fontSize: widget.labelFontSize,
+                fontWeight: widget.labelWeight,
+              ),
+              const SizedBox(height: 6),
+              dk.TextField(
+                hintText: widget.hintText,
+                width: widget.width != null && widget.width! > 850 ? 850 : widget.width,
+                fontSize: widget.inputFontSize,
+                fontWeight: widget.inputWeight,
+                onChanged: widget.onChanged,
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
-          dk.TextField(
-            hintText: hintText,
-            width: width != null && width! > 850 ? 850 : width,
-            fontSize: inputFontSize,
-            fontWeight: inputWeight,
-            onChanged: onChanged,
-            // Note: dk.TextField currently handles its own color internally based on HDFC theme, 
-            // but we can pass color if the atom supports it.
-            // For now, we prioritize the typography requested by the user.
-          ),
-        ],
+        ),
       ),
     );
   }

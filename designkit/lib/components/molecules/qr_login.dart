@@ -97,6 +97,9 @@ class _QrLoginState extends State<QrLogin> {
   /// Used to drive the [AnimatedScale] effect.
   bool _isPressed = false;
 
+  /// Tracks whether the mouse is hovering over the card.
+  bool _isHovering = false;
+
   // ─── QR Popup ────────────────────────────────────────────────────────────────
 
   /// Opens a blurred backdrop dialog showing the QR code image or fallback icon.
@@ -160,6 +163,8 @@ class _QrLoginState extends State<QrLogin> {
       // Allows custom positioning offset without affecting layout
       offset: widget.offset,
       child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit: (_) => setState(() => _isHovering = false),
         // Shows pointer cursor when hovering on desktop/web
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
@@ -169,9 +174,10 @@ class _QrLoginState extends State<QrLogin> {
           onTapCancel: () => setState(() => _isPressed = false),
           onTap: () => _showQrPopup(context),
           child: AnimatedScale(
-            // Subtle shrink on press: 0.99 = very slight, feels responsive
-            scale: _isPressed ? 0.99 : 1.0,
-            duration: const Duration(milliseconds: 100),
+            // Subtle shrink on press: 0.99, grow on hover: 1.02
+            scale: _isPressed ? 0.99 : (_isHovering ? 1.02 : 1.0),
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOutCubic,
             child: LayoutBuilder(
               builder: (context, constraints) {
                 // Adjusts layout for narrower containers

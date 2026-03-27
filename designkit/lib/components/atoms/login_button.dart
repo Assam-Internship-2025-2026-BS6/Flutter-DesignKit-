@@ -121,37 +121,42 @@ class _LoginButtonState extends State<LoginButton>
           onTapDown: _handleTapDown,
           onTapUp: _handleTapUp,
           onTapCancel: _handleTapCancel,
-          child: ScaleTransition(
-            scale: _scaleAnimation,
-            child: Container(
-              width: widget.width,
-              height: widget.height,
-              decoration: BoxDecoration(
-                color: widget.color,
-                borderRadius: BorderRadius.circular(30),
-                border: _isFocused
-                    ? Border.all(color: Colors.white.withValues(alpha: 0.8), width: 2)
-                    : null,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(20), // 0.08 * 255
-                    offset: const Offset(0, 4),
-                    blurRadius: 4,
-                  ),
-                  if (_isFocused || _isHovering)
+          child: AnimatedScale(
+            scale: _isHovering ? 1.02 : 1.0,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutCubic,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: Container(
+                width: widget.width,
+                height: widget.height,
+                decoration: BoxDecoration(
+                  color: widget.color,
+                  borderRadius: BorderRadius.circular(30),
+                  border: _isFocused
+                      ? Border.all(color: Colors.white.withValues(alpha: 0.8), width: 2)
+                      : null,
+                  boxShadow: [
                     BoxShadow(
-                      color: widget.color.withValues(alpha: 0.4),
-                      blurRadius: 12,
-                      spreadRadius: 2,
+                      color: Colors.black.withAlpha(20), // 0.08 * 255
+                      offset: const Offset(0, 4),
+                      blurRadius: 4,
                     ),
-                ],
-              ),
-              alignment: Alignment.center,
-              child: dk.Text(
-                text: widget.text,
-                color: AppColors.white,
-                fontSize: widget.fontSize,
-                fontWeight: widget.fontWeight,
+                    if (_isFocused || _isHovering)
+                      BoxShadow(
+                        color: widget.color.withValues(alpha: 0.4),
+                        blurRadius: 12,
+                        spreadRadius: 2,
+                      ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                child: dk.Text(
+                  text: widget.text,
+                  color: AppColors.white,
+                  fontSize: widget.fontSize,
+                  fontWeight: widget.fontWeight,
+                ),
               ),
             ),
           ),

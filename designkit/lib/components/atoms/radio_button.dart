@@ -54,6 +54,7 @@ class RadioButton extends StatefulWidget {
 
 class _RadioButtonState extends State<RadioButton> {
   bool _isFocused = false;
+  bool _isHovering = false;
 
   void _handleTap() {
     if (widget.onChanged != null) {
@@ -101,6 +102,9 @@ class _RadioButtonState extends State<RadioButton> {
               onShowFocusHighlight: (value) {
                 setState(() => _isFocused = value);
               },
+              onShowHoverHighlight: (value) {
+                setState(() => _isHovering = value);
+              },
               actions: {
                 ActivateIntent: CallbackAction<ActivateIntent>(
                   onInvoke: (_) => _handleTap(),
@@ -110,20 +114,32 @@ class _RadioButtonState extends State<RadioButton> {
                 onTap: widget.disabled ? null : _handleTap,
                 child: Opacity(
                   opacity: widget.disabled ? 0.5 : 1.0,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 8.0),
-                    decoration: BoxDecoration(
-                      color: _isFocused
-                          ? widget.activeColor.withValues(alpha: 0.1)
-                          : Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                      border: _isFocused
-                          ? Border.all(
-                              color: widget.activeColor.withValues(alpha: 0.5),
-                              width: 1)
-                          : null,
-                    ),
+                  child: AnimatedScale(
+                    scale: _isHovering ? 1.02 : 1.0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOutCubic,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 8.0),
+                      decoration: BoxDecoration(
+                        color: _isFocused || _isHovering
+                            ? widget.activeColor.withValues(alpha: 0.15)
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
+                        border: _isFocused || _isHovering
+                            ? Border.all(
+                                color: widget.activeColor.withValues(alpha: _isHovering ? 0.7 : 0.5),
+                                width: _isHovering ? 2.0 : 1.0)
+                            : null,
+                        boxShadow: [
+                          if (_isHovering)
+                            BoxShadow(
+                              color: widget.activeColor.withValues(alpha: 0.2),
+                              blurRadius: 10,
+                              spreadRadius: 3,
+                            ),
+                        ],
+                      ),
                     child: Transform.scale(
                       scale: widget.size,
                       alignment: Alignment.centerLeft,

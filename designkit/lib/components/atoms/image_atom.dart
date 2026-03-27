@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 /// 
 /// This widget provides a consistent way to display assets throughout 
 /// the design kit, including fallback behavior for broken images.
-class dkImage extends StatelessWidget {
+class dkImage extends StatefulWidget {
   /// The path to the image asset.
   final String imagePath;
 
@@ -39,43 +39,76 @@ class dkImage extends StatelessWidget {
   });
 
   @override
+  State<dkImage> createState() => _dkImageState();
+}
+
+class _dkImageState extends State<dkImage> {
+  bool _isHovering = false;
+
+  @override
   Widget build(BuildContext context) {
     Widget imageWidget = Image.asset(
-      imagePath,
-      width: width,
-      height: height,
-      fit: fit,
+      widget.imagePath,
+      width: widget.width,
+      height: widget.height,
+      fit: widget.fit,
       errorBuilder: (context, error, stackTrace) => Container(
-        width: width,
-        height: height,
+        width: widget.width,
+        height: widget.height,
         color: Colors.grey[300],
         child: const Icon(Icons.broken_image, color: Colors.grey),
       ),
     );
 
     return Transform.translate(
-      offset: Offset(offsetX, offsetY),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          if (showShadow)
-            Positioned.fill(
-              child: Transform.translate(
-                offset: const Offset(0, 6),
-                child: ImageFiltered(
-                  imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                  child: ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.2),
-                      BlendMode.srcIn,
+      offset: Offset(widget.offsetX, widget.offsetY),
+      child: m.MouseRegion(
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit: (_) => setState(() => _isHovering = false),
+        cursor: SystemMouseCursors.click,
+        child: m.AnimatedScale(
+          scale: _isHovering ? 1.05 : 1.0,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              if (widget.showShadow)
+                Positioned.fill(
+                  child: Transform.translate(
+                    offset: Offset(0, _isHovering ? 10 : 6),
+                    child: ImageFiltered(
+                      imageFilter: ImageFilter.blur(
+                        sigmaX: _isHovering ? 15 : 10, 
+                        sigmaY: _isHovering ? 15 : 10,
+                      ),
+                      child: ColorFiltered(
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withValues(alpha: _isHovering ? 0.4 : 0.2),
+                          BlendMode.srcIn,
+                        ),
+                        child: imageWidget,
+                      ),
                     ),
-                    child: imageWidget,
                   ),
                 ),
-              ),
-            ),
-          imageWidget,
-        ],
+              if (_isHovering)
+                Positioned.fill(
+                  child: ImageFiltered(
+                    imageFilter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                    child: ColorFiltered(
+                      colorFilter: ColorFilter.mode(
+                        const Color(0xFF004C8F).withValues(alpha: 0.25), // HDFC Blue Halo
+                        BlendMode.srcIn,
+                      ),
+                      child: imageWidget,
+                    ),
+                  ),
+                ),
+              imageWidget,
+            ],
+          ),
+        ),
       ),
     );
   }

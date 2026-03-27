@@ -69,6 +69,9 @@ class _DigicartSecurityState extends State<DigicartSecurity> {
   /// Used to drive the [AnimatedScale] press effect.
   bool _isPressed = false;
 
+  /// Tracks whether the mouse is hovering over the card.
+  bool _isHovering = false;
+
   // ─── Main Card ───────────────────────────────────────────────────────────────
 
   @override
@@ -77,6 +80,8 @@ class _DigicartSecurityState extends State<DigicartSecurity> {
       // Allows custom positioning offset without affecting layout
       offset: widget.offset,
       child: MouseRegion(
+        onEnter: (_) => setState(() => _isHovering = true),
+        onExit: (_) => setState(() => _isHovering = false),
         // Shows pointer cursor when hovering on desktop/web
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
@@ -86,9 +91,10 @@ class _DigicartSecurityState extends State<DigicartSecurity> {
           onTapCancel: () => setState(() => _isPressed = false),
           onTap: widget.onTap,
           child: AnimatedScale(
-            // Shrinks card slightly on press for a tactile feel
-            scale: _isPressed ? 0.96 : 1.0,
-            duration: const Duration(milliseconds: 100),
+            // Shrinks card slightly on press for a tactile feel, grows on hover
+            scale: _isPressed ? 0.96 : (_isHovering ? 1.02 : 1.0),
+            duration: const Duration(milliseconds: 150),
+            curve: Curves.easeOutCubic,
             child: dk.GlassCard(
               width: widget.width,
               height: widget.height,
